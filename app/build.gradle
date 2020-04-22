@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-    def nav_version = "2.3.0-alpha02"
-    def room_version = "2.2.4"
+    def nav_version = '2.3.0-alpha05'
+    def room_version = '2.2.5'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     // androidx dependencies
@@ -44,15 +44,15 @@ dependencies {
     // constraint layout
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     // material
-    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
     // room orm
     implementation "androidx.room:room-runtime:$room_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.room:room-compiler:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
     // retrofit api client
-    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     // navigation component
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
@@ -61,10 +61,10 @@ dependencies {
     // firebase authentication and db
     // note that firebase-core is not required anymore
 //    implementation 'com.google.firebase:firebase-core:17.2.2'
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.2'
     // test setting
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
