@@ -8,17 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.dieschnittstelle.mobile.android.skeleton.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int CAll_DETAILVIEW_FOR_NEW_ITEM = 0;
+    public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
     private ViewGroup listView;
     private FloatingActionButton fab;
 
@@ -59,15 +55,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void onAddNewListitem() {
         Intent callDetailviewIntentForReturnValue = new Intent(this,DetailviewActivity.class);
-        startActivityForResult(callDetailviewIntentForReturnValue,CAll_DETAILVIEW_FOR_NEW_ITEM);
+        startActivityForResult(callDetailviewIntentForReturnValue, CALL_DETAILVIEW_FOR_NEW_ITEM);
+    }
+
+    private void addNewItemToList(String itemName) {
+        ViewGroup newListItem = (ViewGroup)getLayoutInflater().inflate(R.layout.activity_main_listitem,null, false);
+
+        TextView itemNameText = newListItem.findViewById(R.id.itemName);
+        itemNameText.setText(itemName);
+
+        listView.addView(newListItem);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == CAll_DETAILVIEW_FOR_NEW_ITEM) {
+        if (requestCode == CALL_DETAILVIEW_FOR_NEW_ITEM) {
            if (resultCode == Activity.RESULT_OK) {
                String newItemName = data.getStringExtra(DetailviewActivity.ARG_ITEM_NAME);
                showFeedbackMessage("got new item name: " + newItemName);
+               addNewItemToList(newItemName);
            }
            else if (resultCode == Activity.RESULT_CANCELED) {
                showFeedbackMessage("no item name input was cancelled.");
