@@ -11,11 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import model.DataItem;
+
 public class DetailviewActivity extends AppCompatActivity {
 
-    public static final String ARG_ITEM_NAME = "itemName";
+    public static final String ARG_ITEM = "item";
 
     private EditText itemNameEditText;
+    private EditText itemDescriptionEditText;
     private FloatingActionButton saveItemActionButton;
 
     @Override
@@ -25,30 +28,35 @@ public class DetailviewActivity extends AppCompatActivity {
 
         //Daten auslesen
         itemNameEditText = findViewById(R.id.itemName);
+        itemDescriptionEditText = findViewById(R.id.itemDescription);
         saveItemActionButton = findViewById(R.id.fab);
 
         // Daten setzen
-        String itemName = getIntent().getStringExtra(ARG_ITEM_NAME);
-        if (itemName != null) {
-            itemNameEditText.setText(itemName);
+        DataItem item = (DataItem)getIntent().getSerializableExtra(ARG_ITEM);
+        if (item != null) {
+            itemNameEditText.setText(item.getName());
+            itemDescriptionEditText.setText(item.getDescription());
         }
 
         // Daten für Interaktion vorbereiten:
-        // Alles dasselbe:
-        // saveItemActionButton.setOnClickListener(this::onSaveItem);
-        // saveItemActionButton.setOnClickListener(view -> this.onSaveItem());
+//        saveItemActionButton.setOnClickListener(this::onSaveItem);
         saveItemActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                onSaveItem(view);
-            }
+            public void onClick(View view) {onSaveItem(view); }
         });
     }
+
 
     private void onSaveItem(View view) {
         Intent returnData = new Intent();
         String itemNameFromInputText = itemNameEditText.getText().toString();
-        returnData.putExtra(ARG_ITEM_NAME,itemNameFromInputText);
+        String itemDescriptionFromInputText = itemDescriptionEditText.getText().toString();
+
+        DataItem item = new DataItem();
+        item.setName(itemNameFromInputText);
+        item.setDescription(itemDescriptionFromInputText);
+
+        returnData.putExtra(ARG_ITEM,item);
 
         this.setResult(Activity.RESULT_OK, returnData);
         finish();

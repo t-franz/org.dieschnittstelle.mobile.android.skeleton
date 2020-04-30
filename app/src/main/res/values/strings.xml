@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MAD Demo Tobias</string>
+    <string name="detailview_description_label">Description</string>
+    <string name="detailview_name_label">Name</string>
 </resources>

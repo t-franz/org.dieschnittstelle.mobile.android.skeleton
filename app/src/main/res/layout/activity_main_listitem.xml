@@ -3,9 +3,15 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/itemId"
+        android:padding="10dp"
+        android:textSize="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+    <TextView
         android:id="@+id/itemName"
         android:padding="10dp"
         android:textSize="30dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="70dp"/>
 </LinearLayout>
