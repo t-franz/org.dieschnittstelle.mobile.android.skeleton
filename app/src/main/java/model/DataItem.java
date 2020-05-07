@@ -12,6 +12,8 @@ public class DataItem implements Serializable {
 
     private String description;
 
+    private boolean checked;
+
     public DataItem() {
 
     }
@@ -42,5 +44,13 @@ public class DataItem implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

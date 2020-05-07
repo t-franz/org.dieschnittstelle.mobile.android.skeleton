@@ -18,6 +18,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import model.DataItem;
+import model.IDataItemCRUDOperations;
+import model.SimpleDataItemCRUDOperationsimpl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,10 +28,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<DataItem> listViewAdapter;
     private FloatingActionButton fab;
 
+    private IDataItemCRUDOperations crudOperations;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.crudOperations = new SimpleDataItemCRUDOperationsimpl();
 
         this.listView = this.findViewById(R.id.listView);
         this.fab = this.findViewById(R.id.fab);
@@ -70,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         this.fab.setOnClickListener((view) -> {
             this.onAddNewListitem();
         });
+
+//        Listenansicht befüllen
+        this.listViewAdapter.addAll(crudOperations.readAllDataItems());
 
     }
 
