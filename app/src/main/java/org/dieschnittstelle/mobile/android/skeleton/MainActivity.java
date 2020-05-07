@@ -1,9 +1,5 @@
 package org.dieschnittstelle.mobile.android.skeleton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +8,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityMainListitemBinding;
 
 import model.DataItem;
 import model.IDataItemCRUDOperations;
@@ -44,21 +46,16 @@ public class MainActivity extends AppCompatActivity {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                ViewGroup itemView = (ViewGroup)getLayoutInflater().inflate(R.layout.activity_main_listitem,null,false);
+
+                ActivityMainListitemBinding binding = DataBindingUtil.inflate(getLayoutInflater(),R.layout.activity_main_listitem,null, false);
 
                 DataItem item = getItem(position);
+                binding.setItem(item);
 
-                TextView itemNameView = itemView.findViewById(R.id.itemName);
-                TextView itemIdView = itemView.findViewById(R.id.itemId);
-
-                itemNameView.setText(item.getName());
-                itemIdView.setText(String.valueOf(item.getId()));
-
-                return itemView;
+                return binding.getRoot();
             }
 
         };
-
 
 
 
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == CALL_DETAILVIEW_FOR_NEW_ITEM) {
            if (resultCode == Activity.RESULT_OK) {
                DataItem item = (DataItem)data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
-               showFeedbackMessage("got new item name: " + item);
+//               showFeedbackMessage("got new item name: " + item);
                addNewItemToList(item);
            }
            else if (resultCode == Activity.RESULT_CANCELED) {
