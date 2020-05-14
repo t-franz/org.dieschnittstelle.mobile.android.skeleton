@@ -10,11 +10,18 @@ public class SimpleDataItemCRUDOperationsimpl implements IDataItemCRUDOperations
 
     @Override
     public DataItem createDataItem(DataItem item) {
-        return null;
+        return item;
     }
 
     @Override
     public List<DataItem> readAllDataItems() {
+        try {
+            Thread.sleep(5000);
+        }
+        catch (Exception e) {
+
+        }
+
         return Arrays
                 .stream(ITEM_NAMES)
                 .map(name -> new DataItem(name))

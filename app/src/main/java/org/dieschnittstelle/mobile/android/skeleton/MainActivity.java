@@ -2,12 +2,14 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +21,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityMainListitemBinding;
 
+import java.util.List;
+
 import model.DataItem;
 import model.IDataItemCRUDOperations;
 import model.SimpleDataItemCRUDOperationsimpl;
+import tasks.CreateDataItemTask;
+import tasks.ReadAllDataItemsTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
     private FloatingActionButton fab;
+    private ProgressBar progressBar;
 
     private IDataItemCRUDOperations crudOperations;
     @Override
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.listView = this.findViewById(R.id.listView);
         this.fab = this.findViewById(R.id.fab);
+        this.progressBar = findViewById(R.id.progressBar);
 
         this.listViewAdapter = new ArrayAdapter<DataItem>(this,R.layout.activity_main_listitem,R.id.itemName) {
 
@@ -73,8 +81,11 @@ public class MainActivity extends AppCompatActivity {
             this.onAddNewListitem();
         });
 
-//        Listenansicht befüllen
-        this.listViewAdapter.addAll(crudOperations.readAllDataItems());
+
+        new ReadAllDataItemsTask(progressBar,
+                crudOperations,
+                items -> listViewAdapter.addAll(items)
+        ).execute();
 
     }
 
@@ -89,8 +100,12 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(callDetailviewIntentForReturnValue, CALL_DETAILVIEW_FOR_NEW_ITEM);
     }
 
-    private void addNewItemToList(DataItem item) {
-        this.listViewAdapter.add(item);
+    private void createItemAndAddItToList(DataItem item) {
+        new CreateDataItemTask(
+                progressBar,
+                crudOperations,
+                createdItem -> this.listViewAdapter.add(createdItem)
+        ).execute(item);
     }
 
     @Override
@@ -99,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
            if (resultCode == Activity.RESULT_OK) {
                DataItem item = (DataItem)data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
 //               showFeedbackMessage("got new item name: " + item);
-               addNewItemToList(item);
+               createItemAndAddItToList(item);
            }
            else if (resultCode == Activity.RESULT_CANCELED) {
                showFeedbackMessage("no item name input was cancelled.");
