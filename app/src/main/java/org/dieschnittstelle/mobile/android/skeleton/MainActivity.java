@@ -29,10 +29,12 @@ import model.RoomDataItemCRUDOperationsImpl;
 import model.SimpleDataItemCRUDOperationsimpl;
 import tasks.CreateDataItemTask;
 import tasks.ReadAllDataItemsTask;
+import tasks.UpdateDataItemTask;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
+    public static final int CALL_DETAILVIEW_FOR_EXISTING_ITEM = 1;
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
     private FloatingActionButton fab;
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private void onListitemSelected(DataItem item) {
         Intent callDetailviewIntent = new Intent(this,DetailviewActivity.class);
         callDetailviewIntent.putExtra(DetailviewActivity.ARG_ITEM,item);
-        startActivity(callDetailviewIntent);
+        startActivityForResult(callDetailviewIntent, CALL_DETAILVIEW_FOR_EXISTING_ITEM);
     }
 
     private void onAddNewListitem() {
@@ -107,6 +109,33 @@ public class MainActivity extends AppCompatActivity {
                 crudOperations,
                 createdItem -> this.listViewAdapter.add(createdItem)
         ).execute(item);
+    }
+
+    private void updateItemAndUpdateList(DataItem changedItem) {
+
+        new UpdateDataItemTask(progressBar,crudOperations,updated -> {
+          handleResultFromUpdateTask(changedItem,updated);
+        }).execute(changedItem);
+
+    }
+
+    private  void handleResultFromUpdateTask(DataItem changedItem, boolean updated) {
+        if (updated) {
+            int existingItemInListPos = this.listViewAdapter.getPosition(changedItem);
+            if (existingItemInListPos > -1) {
+                DataItem existingItem = this.listViewAdapter.getItem(existingItemInListPos);
+                existingItem.setName((changedItem.getName()));
+                existingItem.setChecked(changedItem.isChecked());
+                existingItem.setDescription(changedItem.getDescription());
+                this.listViewAdapter.notifyDataSetChanged();
+            }
+            else {
+                showFeedbackMessage("Updated: " + changedItem.getName() + " cannot be found in list.");
+            }
+        }
+        else {
+            showFeedbackMessage("Updated: " + changedItem.getName() + " item could not be updated in database.");
+        }
     }
 
     @Override
@@ -123,7 +152,14 @@ public class MainActivity extends AppCompatActivity {
            else {
                showFeedbackMessage("no item name received and no cancellation detected. What's wrong?");
            }
-        } else {
+        }
+        else if (requestCode == CALL_DETAILVIEW_FOR_EXISTING_ITEM) {
+            if (resultCode == Activity.RESULT_OK) {
+                DataItem item = (DataItem) data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
+                updateItemAndUpdateList(item);
+            }
+        }
+        else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }

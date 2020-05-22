@@ -8,6 +8,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
       @Insert
       public long create(DataItem item);
+
+      @Update
+      public int update(DataItem item);
 
     }
 
@@ -44,6 +48,12 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
     @Override
     public List<DataItem> readAllDataItems() {
+//        try{
+//            Thread.sleep(2000);
+//        }
+//        catch (Exception e) {
+//
+//        }
         return db.getDato().readAll();
     }
 
@@ -54,6 +64,9 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
     @Override
     public boolean updateDataItem(DataItem item) {
+        if (db.getDato().update(item) > 0) {
+            return true;
+        }
         return false;
     }
 
