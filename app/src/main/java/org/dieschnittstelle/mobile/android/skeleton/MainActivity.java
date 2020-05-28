@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -33,12 +34,16 @@ import tasks.UpdateDataItemTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String logger = "MainActivity";
+
     public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
     public static final int CALL_DETAILVIEW_FOR_EXISTING_ITEM = 1;
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
     private FloatingActionButton fab;
     private ProgressBar progressBar;
+
+
 
     private IDataItemCRUDOperations crudOperations;
     @Override
@@ -56,14 +61,26 @@ public class MainActivity extends AppCompatActivity {
 
             @NonNull
             @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            public View getView(int position, @Nullable View existingView, @NonNull ViewGroup parent) {
+                Log.i(logger,"using existingView for position:" + position +": " + existingView);
 
-                ActivityMainListitemBinding binding = DataBindingUtil.inflate(getLayoutInflater(),R.layout.activity_main_listitem,null, false);
+                ActivityMainListitemBinding binding = null;
+                View currentView = null;
+
+                if (existingView != null) {
+                    currentView = existingView;
+                    binding = (ActivityMainListitemBinding) existingView.getTag();
+                }
+                else {
+                    binding = DataBindingUtil.inflate(getLayoutInflater(),R.layout.activity_main_listitem,null, false);
+                    currentView = binding.getRoot();
+                    currentView.setTag(binding);
+                }
 
                 DataItem item = getItem(position);
                 binding.setItem(item);
 
-                return binding.getRoot();
+                return currentView;
             }
 
         };
