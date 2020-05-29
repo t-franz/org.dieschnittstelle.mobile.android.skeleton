@@ -26,6 +26,7 @@ import java.util.List;
 
 import model.DataItem;
 import model.IDataItemCRUDOperations;
+import model.RetrofitDataItemCRUDOperationsImpl;
 import model.RoomDataItemCRUDOperationsImpl;
 import model.SimpleDataItemCRUDOperationsimpl;
 import tasks.CreateDataItemTask;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.crudOperations = new RoomDataItemCRUDOperationsImpl(this);//this.crudOperations = new SimpleDataItemCRUDOperationsimpl();
+        this.crudOperations = new RetrofitDataItemCRUDOperationsImpl();//new RoomDataItemCRUDOperationsImpl(this);//this.crudOperations = new SimpleDataItemCRUDOperationsimpl();
 
         this.listView = this.findViewById(R.id.listView);
         this.fab = this.findViewById(R.id.fab);
