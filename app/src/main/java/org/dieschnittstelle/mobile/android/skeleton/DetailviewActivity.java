@@ -2,7 +2,10 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailviewBinding;
 
 import model.DataItem;
@@ -20,6 +25,7 @@ import model.DataItem;
 public class DetailviewActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM = "item";
+    public static final int CALL_CONTACT_PICKER = 0;
 
     private DataItem item;
     private ActivityDetailviewBinding binding;
@@ -61,7 +67,7 @@ public class DetailviewActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.addContact:selectAndAddContactToItem();return true;
+            case R.id.addContact:selectAndAddContact();return true;
             case R.id.doSomethingElse:
                 Toast.makeText(this,
                         "Something else",
@@ -70,9 +76,35 @@ public class DetailviewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void selectAndAddContactToItem() {
-        Toast.makeText(this,
-                "Will select contact ...",
-                Toast.LENGTH_SHORT).show();
+    private void selectAndAddContact() {
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(pickContactIntent,CALL_CONTACT_PICKER);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == CALL_CONTACT_PICKER && resultCode == Activity.RESULT_OK) {
+            // _15 15:00
+            addSelectedContactToContacts(data.getData());
+        }
+        else {
+            super.onActivityResult(requestCode,resultCode,data);
+        }
+    }
+
+    private void addSelectedContactToContacts(Uri contactId) {
+
+        Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
+        if (cursor.moveToFirst()) {
+            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+
+            showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
+        }
+    }
+
+    private void showFeedbackMessage(String msg) {
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 }
