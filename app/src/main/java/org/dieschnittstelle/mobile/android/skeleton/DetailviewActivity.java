@@ -3,8 +3,12 @@ package org.dieschnittstelle.mobile.android.skeleton;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -46,5 +50,29 @@ public class DetailviewActivity extends AppCompatActivity {
 
     public DataItem getItem() {
         return item;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_options,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addContact:selectAndAddContactToItem();return true;
+            case R.id.doSomethingElse:
+                Toast.makeText(this,
+                        "Something else",
+                        Toast.LENGTH_SHORT).show();return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void selectAndAddContactToItem() {
+        Toast.makeText(this,
+                "Will select contact ...",
+                Toast.LENGTH_SHORT).show();
     }
 }

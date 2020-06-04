@@ -126,7 +126,11 @@ public class MainActivity extends AppCompatActivity {
         new CreateDataItemTask(
                 progressBar,
                 crudOperations,
-                createdItem -> this.listViewAdapter.add(createdItem)
+                createdItem -> {
+                    this.listViewAdapter.add(createdItem);
+                    ((ListView)this.listView).smoothScrollToPosition(
+                            this.listViewAdapter.getPosition(createdItem));
+                }
         ).execute(item);
     }
 
