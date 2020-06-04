@@ -5,6 +5,9 @@
     <variable
         name="item"
         type="model.DataItem" />
+    <variable
+        name="controller"
+        type="org.dieschnittstelle.mobile.android.skeleton.MainActivity" />
 </data>
 <LinearLayout
     android:orientation="horizontal" android:layout_width="match_parent"
@@ -12,6 +15,7 @@
     <CheckBox
         android:focusable="false"
         android:checked="@={item.checked}"
+        android:onClick="@{() -> controller.onListItemChangedInList(item)}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView

@@ -3,6 +3,8 @@ package model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,6 +21,7 @@ public class DataItem implements Serializable {
 
     private String description;
 
+    @SerializedName("done")
     private boolean checked;
 
     public DataItem() {

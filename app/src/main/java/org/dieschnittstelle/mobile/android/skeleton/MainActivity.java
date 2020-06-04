@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                 DataItem item = getItem(position);
                 binding.setItem(item);
+                binding.setController(MainActivity.this);
 
                 return currentView;
             }
@@ -184,5 +185,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void showFeedbackMessage(String msg) {
         Snackbar.make(findViewById(R.id.viewRoot),msg, Snackbar.LENGTH_LONG).show(); // Kurze Darstellung
+    }
+
+    public void onListItemChangedInList(DataItem changedItem) {
+        new UpdateDataItemTask(progressBar,this.crudOperations,
+                updated ->
+                        showFeedbackMessage("changedItem " + changedItem.getName() + " has been updated"))
+                .execute(changedItem);
     }
 }
