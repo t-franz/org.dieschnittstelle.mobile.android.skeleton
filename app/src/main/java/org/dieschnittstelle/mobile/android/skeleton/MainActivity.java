@@ -52,7 +52,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.crudOperations = new RetrofitDataItemCRUDOperationsImpl();//new RoomDataItemCRUDOperationsImpl(this);//this.crudOperations = new SimpleDataItemCRUDOperationsimpl();
+        ((DataItemApplication) getApplication())
+                .verifyWebappAvailable(available -> {
+                   this.initialiseView();
+                }
+        );
+    }
+
+    private void initialiseView() {
+
+        this.crudOperations = ((DataItemApplication)getApplication()).getCrudOperations();
 
         this.listView = this.findViewById(R.id.listView);
         this.fab = this.findViewById(R.id.fab);

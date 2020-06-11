@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailviewBinding;
@@ -34,6 +39,25 @@ public class DetailviewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_detailview);
+
+        FloatingActionButton fab = binding.getRoot().findViewById(R.id.fab);
+        EditText itemName = binding.getRoot().findViewById(R.id.itemName);
+        fab.setEnabled(false);
+
+        itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (textView.getText().toString().trim().length() == 0) {
+                        textView.setError("You need to input a name for the item!");
+                    }
+                    else {
+                        fab.setEnabled(true);
+                    }
+                }
+                return false;
+            }
+        });
 
         this.item = (DataItem)getIntent().getSerializableExtra(ARG_ITEM);
         if (this.item == null) {
