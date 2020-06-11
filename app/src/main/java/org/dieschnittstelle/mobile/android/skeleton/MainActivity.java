@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 existingItem.setName((changedItem.getName()));
                 existingItem.setChecked(changedItem.isChecked());
                 existingItem.setDescription(changedItem.getDescription());
+                existingItem.setContacts(changedItem.getContacts());
                 this.listViewAdapter.notifyDataSetChanged();
             }
             else {

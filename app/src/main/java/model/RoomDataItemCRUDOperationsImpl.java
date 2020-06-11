@@ -11,6 +11,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.Update;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
     @Dao
@@ -41,6 +42,7 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
     @Override
     public DataItem createDataItem(DataItem item) {
+//        item.beforePersist();
         long id = db.getDato().create(item);
         item.setId(id);
         return item;
@@ -54,7 +56,11 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 //        catch (Exception e) {
 //
 //        }
-        return db.getDato().readAll();
+        return db.getDato()
+                .readAll();
+//                .stream()
+//                .map(item -> item.afterLoad())
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -64,6 +70,7 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
     @Override
     public boolean updateDataItem(DataItem item) {
+        item.beforePersist();
         if (db.getDato().update(item) > 0) {
             return true;
         }

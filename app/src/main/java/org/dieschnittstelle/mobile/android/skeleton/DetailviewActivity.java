@@ -25,6 +25,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailviewBinding;
 
+import java.util.ArrayList;
+
 import model.DataItem;
 
 public class DetailviewActivity extends AppCompatActivity {
@@ -42,7 +44,7 @@ public class DetailviewActivity extends AppCompatActivity {
 
         FloatingActionButton fab = binding.getRoot().findViewById(R.id.fab);
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
-        fab.setEnabled(false);
+       // fab.setEnabled(false);
 
         itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -65,6 +67,8 @@ public class DetailviewActivity extends AppCompatActivity {
         }
 
         binding.setController(this);
+
+        this.showFeedbackMessage("Item has contacts: " + this.item.getContacts());
 
     }
 
@@ -125,6 +129,13 @@ public class DetailviewActivity extends AppCompatActivity {
             String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
             showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
+
+            if (item.getContacts() == null) {
+                item.setContacts(new ArrayList<>());
+            }
+            if (item.getContacts().indexOf(internalContactId) == -1) {
+                item.getContacts().add(contactId.toString());
+            }
         }
     }
 
