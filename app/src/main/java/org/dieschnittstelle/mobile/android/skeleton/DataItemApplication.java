@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import model.IDataItemCRUDOperations;
 import model.RetrofitDataItemCRUDOperationsImpl;
 import model.RoomDataItemCRUDOperationsImpl;
+import model.SyncedDataItemCRUDOperations;
 
 public class DataItemApplication extends Application {
 
@@ -17,8 +18,10 @@ public class DataItemApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //crudOperations = new RetrofitDataItemCRUDOperationsImpl();
-        crudOperations = new RoomDataItemCRUDOperationsImpl(this);
+        // crudOperations = new RetrofitDataItemCRUDOperationsImpl();
+        // crudOperations = new RoomDataItemCRUDOperationsImpl(this);
+        crudOperations = new SyncedDataItemCRUDOperations(this);
+
     }
 
     public IDataItemCRUDOperations getCrudOperations() {

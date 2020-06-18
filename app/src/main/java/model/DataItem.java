@@ -23,16 +23,21 @@ public class DataItem implements Serializable {
 //    private static long idcount = 0;
 
     @PrimaryKey(autoGenerate = true)
+    @Expose(serialize = true, deserialize = true)
     private long id; // = ++idcount;
 
+    @Expose(serialize = true, deserialize = true)
     private String name;
 
+    @Expose(serialize = true, deserialize = true)
     private String description;
 
     @SerializedName("done")
+    @Expose(serialize = true, deserialize = true)
     private boolean checked;
 
     @Ignore
+    @Expose(serialize = true, deserialize = true)
     private List<String> contacts = new ArrayList<>();
 
     @Expose(serialize = false, deserialize = false)

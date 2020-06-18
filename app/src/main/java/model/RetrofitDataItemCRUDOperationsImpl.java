@@ -2,6 +2,9 @@ package model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -31,9 +34,10 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
     private TodoWebAPI webAPI;
 
     public RetrofitDataItemCRUDOperationsImpl(){
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Retrofit apiRoot = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:8080/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         webAPI = apiRoot.create(TodoWebAPI.class);
