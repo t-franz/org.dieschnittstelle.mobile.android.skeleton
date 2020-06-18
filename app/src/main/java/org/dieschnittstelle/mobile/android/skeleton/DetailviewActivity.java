@@ -1,7 +1,9 @@
 package org.dieschnittstelle.mobile.android.skeleton;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,6 +72,11 @@ public class DetailviewActivity extends AppCompatActivity {
 
         this.showFeedbackMessage("Item has contacts: " + this.item.getContacts());
 
+        if (item.getContacts() != null && item.getContacts().size() > 0) {
+            item.getContacts().forEach(contactUriAsString -> {
+                this.showContactDetails(Uri.parse(contactUriAsString));
+            });
+        }
     }
 
 
@@ -123,19 +130,39 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private void addSelectedContactToContacts(Uri contactId) {
 
+        if (item.getContacts() == null) {
+            item.setContacts(new ArrayList<>());
+        }
+        if (item.getContacts().indexOf(contactId.toString()) == -1) {
+            item.getContacts().add(contactId.toString());
+        }
+
+        showContactDetails(contactId);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+    }
+
+    private void showContactDetails(Uri contactId) {
+
+        int hasReadContactsPermission = checkSelfPermission(Manifest.permission.READ_CONTACTS);
+        if (hasReadContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},4);
+            return;
+        }
+        else {
+            showFeedbackMessage("Contact Permissions have been granted!");
+        }
+
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
         if (cursor.moveToFirst()) {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
             showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
-
-            if (item.getContacts() == null) {
-                item.setContacts(new ArrayList<>());
-            }
-            if (item.getContacts().indexOf(internalContactId) == -1) {
-                item.getContacts().add(contactId.toString());
-            }
+            // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr!
         }
     }
 
