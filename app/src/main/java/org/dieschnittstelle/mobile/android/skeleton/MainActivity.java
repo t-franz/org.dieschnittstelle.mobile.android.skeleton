@@ -22,6 +22,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityMainListitemBinding;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import model.DataItem;
@@ -39,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
     public static final int CALL_DETAILVIEW_FOR_EXISTING_ITEM = 1;
+
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
+    private List<DataItem> itemsList = new ArrayList<>();
     private FloatingActionButton fab;
     private ProgressBar progressBar;
 
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         this.fab = this.findViewById(R.id.fab);
         this.progressBar = findViewById(R.id.progressBar);
 
-        this.listViewAdapter = new ArrayAdapter<DataItem>(this,R.layout.activity_main_listitem,R.id.itemName) {
+        this.listViewAdapter = new ArrayAdapter<DataItem>(this,R.layout.activity_main_listitem,R.id.itemName,itemsList) {
 
             @NonNull
             @Override
@@ -115,9 +119,24 @@ public class MainActivity extends AppCompatActivity {
 
         new ReadAllDataItemsTask(progressBar,
                 crudOperations,
-                items -> listViewAdapter.addAll(items)
+                items -> {
+                    listViewAdapter.addAll(items);
+                    sortListAndFocusItem(null);
+                }
         ).execute();
 
+    }
+
+    private void sortListAndFocusItem(DataItem item) {
+
+        this.itemsList.sort(Comparator
+                .comparing(DataItem::isChecked)
+                .thenComparing(DataItem::getName));
+        this.listViewAdapter.notifyDataSetChanged();
+
+        if(item != null) {
+            ((ListView)this.listView).smoothScrollToPosition(this.listViewAdapter.getPosition(item));
+        }
     }
 
     private void onListitemSelected(DataItem item) {
@@ -137,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 crudOperations,
                 createdItem -> {
                     this.listViewAdapter.add(createdItem);
-                    ((ListView)this.listView).smoothScrollToPosition(
-                            this.listViewAdapter.getPosition(createdItem));
+                    this.sortListAndFocusItem(createdItem);
                 }
         ).execute(item);
     }
@@ -161,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 existingItem.setDescription(changedItem.getDescription());
                 existingItem.setContacts(changedItem.getContacts());
                 this.listViewAdapter.notifyDataSetChanged();
+                this.sortListAndFocusItem(existingItem);
             }
             else {
                 showFeedbackMessage("Updated: " + changedItem.getName() + " cannot be found in list.");
@@ -204,7 +223,10 @@ public class MainActivity extends AppCompatActivity {
     public void onListItemChangedInList(DataItem changedItem) {
         new UpdateDataItemTask(progressBar,this.crudOperations,
                 updated ->
-                        showFeedbackMessage("changedItem " + changedItem.getName() + " has been updated"))
+                        {
+                            showFeedbackMessage("changedItem " + changedItem.getName() + " has been updated");
+                            this.sortListAndFocusItem(changedItem);
+                        })
                 .execute(changedItem);
     }
 }
