@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -157,12 +158,47 @@ public class DetailviewActivity extends AppCompatActivity {
         }
 
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
 
             showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
-            // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr!
+
+            // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr
+            // Kapitel Zugriff auf CONTACT_ID
+
+            Cursor phoneCursor = getContentResolver().query(
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "= ?",
+                    new String[] {internalContactId},
+                    null,null);
+            while (phoneCursor.moveToNext()) {
+                String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                int phoneNumberType = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA2));
+
+                if (phoneNumberType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
+                    Log.i("DetailviewActivity","found mobile number: " + number);
+                }
+                else {
+                    Log.i("DetailViewActivity","found other number: " + number);
+                }
+            }
+            Log.i("DetailViewActivity","no (further) phone numbers found for contact " + contactName);
+
+            Cursor emailCursor = getContentResolver().query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + "= ?",
+                    new String[] {internalContactId},
+                    null,null);
+            while (emailCursor.moveToNext()) {
+                String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
+                Log.i("DetailViewActivity","email is: " + email);
+            }
+            Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
+
+            // Aufruf siehe 77ff item.getContacts().forEach(contactUriAsString -> { ...
         }
     }
 
