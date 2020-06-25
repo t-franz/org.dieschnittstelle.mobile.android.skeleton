@@ -10,6 +10,7 @@ import model.IDataItemCRUDOperations;
 import model.RetrofitDataItemCRUDOperationsImpl;
 import model.RoomDataItemCRUDOperationsImpl;
 import model.SyncedDataItemCRUDOperations;
+import tasks.CheckConnectivityTask;
 
 public class DataItemApplication extends Application {
 
@@ -29,24 +30,21 @@ public class DataItemApplication extends Application {
     }
 
     public void verifyWebappAvailable(Consumer<Boolean> onDone) {
-        new AsyncTask<Void,Void,Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                try {
-                    Thread.sleep(2000);
-                }
-                catch (Exception e) {
-
-                }
-                return true;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean available) {
-                Toast.makeText(DataItemApplication.this,"The webapp is running!",Toast.LENGTH_SHORT).show();
+        new CheckConnectivityTask(available -> {
+            if (!available) {
+                this.crudOperations = new RoomDataItemCRUDOperationsImpl(this);
+                Toast.makeText(DataItemApplication.this,"The webapp is NOT running!",Toast.LENGTH_SHORT).show();
                 onDone.accept(available);
             }
-        }.execute();
+            else {
+                Toast.makeText(DataItemApplication.this,"The webapp is running!",Toast.LENGTH_SHORT).show();
+                // Erstelle hier einen neuen AsyncTast, entweder inline oder als AsyncTask-Klasse,
+                // der die doAbgleich-Methode auf CrudOperations aufruft
+                // und in seinem onDone-Callback onDone.Accept aufruft
+                // BESSER: ABGLEICH nach LOGIN
+                onDone.accept(available);
+            }
+        }).execute();
+
     }
 }
