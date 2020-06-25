@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 DataItem existingItem = this.listViewAdapter.getItem(existingItemInListPos);
                 existingItem.setName((changedItem.getName()));
                 existingItem.setChecked(changedItem.isChecked());
+                existingItem.setFavourite(changedItem.isFavourite());
                 existingItem.setDescription(changedItem.getDescription());
                 existingItem.setContacts(changedItem.getContacts());
                 this.listViewAdapter.notifyDataSetChanged();

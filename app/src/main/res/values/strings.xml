@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">MAD Demo Tobias</string>
-    <string name="detailview_description_label">Description</string>
-    <string name="detailview_name_label">Name</string>
+    <string name="app_name">MAD ToDo</string>
+    <string name="detailview_description_label">Beschreibung</string>
+    <string name="detailview_name_label">Titel</string>
+    <string name="checked">erledigt</string>
+    <string name="favourite">wichtig</string>
 </resources>

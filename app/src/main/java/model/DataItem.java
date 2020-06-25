@@ -36,6 +36,9 @@ public class DataItem implements Serializable {
     @Expose(serialize = true, deserialize = true)
     private boolean checked;
 
+    @Expose(serialize = true, deserialize = true)
+    private boolean favourite;
+
     @Ignore
     @Expose(serialize = true, deserialize = true)
     private List<String> contacts = new ArrayList<>();
@@ -82,6 +85,15 @@ public class DataItem implements Serializable {
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
 
     @Override
     public boolean equals(Object o) {

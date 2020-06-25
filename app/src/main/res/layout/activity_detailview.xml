@@ -36,13 +36,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:text="checked"
+            android:text="@string/checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/itemFavourite"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/itemChecked"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <CheckBox
+            android:checked="@={controller.item.favourite}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="@string/favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </TextView>
     </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
-        app:layout_constraintTop_toBottomOf="@id/itemChecked"
+        app:layout_constraintTop_toBottomOf="@id/itemFavourite"
         app:hintEnabled="true"
         android:hint="@string/detailview_description_label"
         android:id="@+id/itemDescriptionWrapper"

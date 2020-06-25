@@ -22,15 +22,23 @@
         android:text="@{String.valueOf(item.id)}"
         android:id="@+id/itemId"
         android:padding="10dp"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:layout_width="wrap_content"
         android:layout_height="70dp"/>
     <TextView
         android:text="@{item.name}"
         android:id="@+id/itemName"
         android:padding="10dp"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:layout_width="wrap_content"
         android:layout_height="70dp"/>
+    <CheckBox
+        app:layout_constraintTop_toBottomOf="@id/itemName"
+        android:focusable="false"
+        android:checked="@={item.favourite}"
+        android:onClick="@{() -> controller.onListItemChangedInList(item)}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>
 </layout>

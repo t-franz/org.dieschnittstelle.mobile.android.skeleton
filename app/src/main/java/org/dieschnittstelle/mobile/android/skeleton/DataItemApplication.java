@@ -1,13 +1,11 @@
 package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Application;
-import android.os.AsyncTask;
 import android.widget.Toast;
 
 import java.util.function.Consumer;
 
 import model.IDataItemCRUDOperations;
-import model.RetrofitDataItemCRUDOperationsImpl;
 import model.RoomDataItemCRUDOperationsImpl;
 import model.SyncedDataItemCRUDOperations;
 import tasks.CheckConnectivityTask;
@@ -19,8 +17,6 @@ public class DataItemApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // crudOperations = new RetrofitDataItemCRUDOperationsImpl();
-        // crudOperations = new RoomDataItemCRUDOperationsImpl(this);
         crudOperations = new SyncedDataItemCRUDOperations(this);
 
     }
