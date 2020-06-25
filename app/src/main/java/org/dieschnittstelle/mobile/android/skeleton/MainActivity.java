@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -94,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
                 DataItem item = getItem(position);
                 binding.setItem(item);
                 binding.setController(MainActivity.this);
+
+                // Textfarbe ändern bei Überfälligkeit nach Zufallskriterium
+                TextView itemName = binding.getRoot().findViewById(R.id.itemName);
+                if (System.currentTimeMillis() % 2 == 0) {
+                    itemName.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
+                }
 
                 return currentView;
             }
