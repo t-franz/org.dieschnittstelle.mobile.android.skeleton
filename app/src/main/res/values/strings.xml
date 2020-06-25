@@ -4,4 +4,6 @@
     <string name="detailview_name_label">Titel</string>
     <string name="checked">erledigt</string>
     <string name="favourite">wichtig</string>
+    <string name="setExpiryDate">Fälligkeitsdatum</string>
+    <string name="setExpiryTime">Uhrzeit</string>
 </resources>
