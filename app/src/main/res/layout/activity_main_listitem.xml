@@ -26,6 +26,13 @@
         android:layout_width="wrap_content"
         android:layout_height="70dp"/>
     <TextView
+        android:text="@{String.valueOf(item.expiry)}"
+        android:id="@+id/itemExpiry"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"/>
+    <TextView
         android:text="@{item.name}"
         android:id="@+id/itemName"
         android:padding="10dp"
@@ -38,7 +45,7 @@
         android:checked="@={item.favourite}"
         android:onClick="@{() -> controller.onListItemChangedInList(item)}"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
 </layout>

@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
 
-
     private IDataItemCRUDOperations crudOperations;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         this.listView = this.findViewById(R.id.listView);
         this.fab = this.findViewById(R.id.fab);
         this.progressBar = findViewById(R.id.progressBar);
+
 
         this.listViewAdapter = new ArrayAdapter<DataItem>(this,R.layout.activity_main_listitem,R.id.itemName,itemsList) {
 
@@ -132,12 +132,14 @@ public class MainActivity extends AppCompatActivity {
                 }
         ).execute();
 
+
     }
 
     private void sortListAndFocusItem(DataItem item) {
 
         this.itemsList.sort(Comparator
                 .comparing(DataItem::isChecked)
+                .thenComparing(DataItem::isFavourite)
                 .thenComparing(DataItem::getName));
         this.listViewAdapter.notifyDataSetChanged();
 
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 existingItem.setFavourite(changedItem.isFavourite());
                 existingItem.setDescription(changedItem.getDescription());
                 existingItem.setContacts(changedItem.getContacts());
+                existingItem.setExpiry(changedItem.getExpiry());
                 this.listViewAdapter.notifyDataSetChanged();
                 this.sortListAndFocusItem(existingItem);
             }

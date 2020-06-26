@@ -78,33 +78,43 @@
 
     <LinearLayout
         app:layout_constraintTop_toBottomOf="@id/itemDescriptionWrapper"
-        app:hintEnabled="true"
-        android:hint="@string/setExpiryDate"
         android:id="@+id/itemDateWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <DatePicker
+        android:orientation="vertical">
+        <EditText
             android:id="@+id/expiry"
-            app:layout_constraintTop_toBottomOf="@id/time"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"/>
-    </LinearLayout>
-    <LinearLayout
-        app:layout_constraintTop_toBottomOf="@id/itemDateWrapper"
-        app:hintEnabled="true"
-        android:hint="@string/setExpiryTime"
-        android:id="@+id/itemTimeWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TimePicker
-            android:id="@+id/time"
-            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="false"
+            app:hintEnabled="true"
+            android:hint="@string/setExpiryDate"
+            android:inputType="date" />
+        <EditText
+            android:id="@+id/expiryTime"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:timePickerMode="spinner" />
+            android:clickable="true"
+            android:focusable="false"
+            app:hintEnabled="true"
+            android:hint="@string/setExpiryTime"
+            android:inputType="time" />
+<!--        <Button-->
+<!--            android:id="@+id/expiryBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/expiry"-->
+<!--            android:text="Get Date" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/expiryTextView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/expiryBtn"-->
+<!--            android:layout_marginLeft="100dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="18sp"/>-->
     </LinearLayout>
 
 

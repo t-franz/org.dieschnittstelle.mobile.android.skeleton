@@ -30,6 +30,9 @@ public class DataItem implements Serializable {
     private String name;
 
     @Expose(serialize = true, deserialize = true)
+    private int expiry;
+
+    @Expose(serialize = true, deserialize = true)
     private String description;
 
     @SerializedName("done")
@@ -46,9 +49,7 @@ public class DataItem implements Serializable {
     @Expose(serialize = false, deserialize = false)
     private String contactsStr;
 
-    public DataItem() {
-
-    }
+    public DataItem() {}
 
     public DataItem(String name) {
         this.name = name;
@@ -92,6 +93,14 @@ public class DataItem implements Serializable {
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public int getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(int expiry) {
+        this.expiry = expiry;
     }
 
 

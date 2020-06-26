@@ -2,20 +2,26 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailviewBinding;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import model.DataItem;
 
@@ -39,6 +46,13 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private DataItem item;
     private ActivityDetailviewBinding binding;
+
+    DatePickerDialog datePicker;
+    EditText expiryDate;
+//    Button btnGetExpiry;
+//    TextView expiryTextView;
+    TimePickerDialog timePicker;
+    EditText expiryTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +92,36 @@ public class DetailviewActivity extends AppCompatActivity {
                 this.showContactDetails(Uri.parse(contactUriAsString));
             });
         }
+
+        // Date Picker Dialog
+//        expiryTextView = binding.getRoot().findViewById(R.id.expiryTextView);
+        expiryDate = binding.getRoot().findViewById(R.id.expiry);
+        expiryDate.setInputType(InputType.TYPE_NULL);
+        expiryDate.setOnClickListener(v -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            datePicker = new DatePickerDialog(DetailviewActivity.this,
+                    (view, year1, monthOfYear, dayOfMonth) ->
+                            expiryDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
+            datePicker.show();
+        });
+//        btnGetExpiry=findViewById(R.id.expiryBtn);
+//        btnGetExpiry.setOnClickListener(v -> expiryTextView.setText("Selected Date: "+ expiryDate.getText()));
+
+        // Time Picker Dialog
+        expiryTime = binding.getRoot().findViewById(R.id.expiryTime);
+        expiryTime.setInputType(InputType.TYPE_NULL);
+        expiryTime.setOnClickListener(v -> {
+            final Calendar cldr = Calendar.getInstance();
+            int hour = cldr.get(Calendar.HOUR_OF_DAY);
+            int minutes = cldr.get(Calendar.MINUTE);
+            timePicker = new TimePickerDialog(DetailviewActivity.this,
+                    (tp, sHour, sMinute) -> expiryTime.setText(sHour + ":" + sMinute), hour, minutes, true);
+            timePicker.show();
+        });
+
     }
 
 
@@ -121,7 +165,6 @@ public class DetailviewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CALL_CONTACT_PICKER && resultCode == Activity.RESULT_OK) {
-            // _15 15:00
             addSelectedContactToContacts(data.getData());
         }
         else {
