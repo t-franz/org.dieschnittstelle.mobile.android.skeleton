@@ -63,6 +63,8 @@ public class DetailviewActivity extends AppCompatActivity {
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
        // fab.setEnabled(false);
 
+        FloatingActionButton fabDelete = binding.getRoot().findViewById(R.id.fabDelete);
+
         itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -121,7 +123,6 @@ public class DetailviewActivity extends AppCompatActivity {
                     (tp, sHour, sMinute) -> expiryTime.setText(sHour + ":" + sMinute), hour, minutes, true);
             timePicker.show();
         });
-
     }
 
 
@@ -133,6 +134,7 @@ public class DetailviewActivity extends AppCompatActivity {
         this.setResult(Activity.RESULT_OK, returnData);
         finish();
     }
+
 
     public DataItem getItem() {
         return item;
