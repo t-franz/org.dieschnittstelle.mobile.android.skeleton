@@ -100,13 +100,15 @@ public class DetailviewActivity extends AppCompatActivity {
         expiryDate = binding.getRoot().findViewById(R.id.expiry);
         expiryDate.setInputType(InputType.TYPE_NULL);
         expiryDate.setOnClickListener(v -> {
-            final Calendar cldr = Calendar.getInstance();
-            int day = cldr.get(Calendar.DAY_OF_MONTH);
-            int month = cldr.get(Calendar.MONTH);
-            int year = cldr.get(Calendar.YEAR);
+            final Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
             datePicker = new DatePickerDialog(DetailviewActivity.this,
                     (view, year1, monthOfYear, dayOfMonth) ->
-                            expiryDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1), year, month, day);
+                            expiryDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1), year, month, day);
+            item.setExpiry(calendar.getTimeInMillis());
+
             datePicker.show();
         });
 //        btnGetExpiry=findViewById(R.id.expiryBtn);
@@ -123,6 +125,8 @@ public class DetailviewActivity extends AppCompatActivity {
                     (tp, sHour, sMinute) -> expiryTime.setText(sHour + ":" + sMinute), hour, minutes, true);
             timePicker.show();
         });
+
+
     }
 
 
@@ -134,7 +138,7 @@ public class DetailviewActivity extends AppCompatActivity {
         this.setResult(Activity.RESULT_OK, returnData);
         finish();
     }
-
+    
 
     public DataItem getItem() {
         return item;

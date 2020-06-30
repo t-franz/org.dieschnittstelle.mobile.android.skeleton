@@ -87,19 +87,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:text="@{controller.item.getDateString()}"
             android:focusable="false"
             app:hintEnabled="true"
             android:hint="@string/setExpiryDate"
-            android:inputType="date" />
+            android:inputType="date"
+            android:autofillHints="dd.MM.yyyy" />
         <EditText
             android:id="@+id/expiryTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:focusable="false"
+            android:focusable="true"
             app:hintEnabled="true"
             android:hint="@string/setExpiryTime"
-            android:inputType="time" />
+            android:inputType="time"
+            android:autofillHints="hh:mm" />
 <!--        <Button-->
 <!--            android:id="@+id/expiryBtn"-->
 <!--            android:layout_width="wrap_content"-->

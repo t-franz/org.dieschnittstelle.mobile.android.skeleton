@@ -1,5 +1,7 @@
 package model;
 
+import android.icu.text.SimpleDateFormat;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -10,6 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -30,7 +33,7 @@ public class DataItem implements Serializable {
     private String name;
 
     @Expose(serialize = true, deserialize = true)
-    private int expiry;
+    private long expiry;
 
     @Expose(serialize = true, deserialize = true)
     private String description;
@@ -95,11 +98,11 @@ public class DataItem implements Serializable {
         this.favourite = favourite;
     }
 
-    public int getExpiry() {
+    public long getExpiry() {
         return expiry;
     }
 
-    public void setExpiry(int expiry) {
+    public void setExpiry(long expiry) {
         this.expiry = expiry;
     }
 
@@ -153,5 +156,13 @@ public class DataItem implements Serializable {
             this.contactsStr = null;
         }
         return this;
+    }
+
+    public String getDateString(){
+        if (this.expiry == 0){
+            return "Fälligkeitsdatum auswählen";
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(new Date(this.expiry));
     }
 }

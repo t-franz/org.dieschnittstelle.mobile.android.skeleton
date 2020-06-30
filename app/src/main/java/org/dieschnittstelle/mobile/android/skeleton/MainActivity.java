@@ -2,6 +2,7 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityMainList
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import model.DataItem;
@@ -240,4 +242,5 @@ public class MainActivity extends AppCompatActivity {
                         })
                 .execute(changedItem);
     }
+
 }
