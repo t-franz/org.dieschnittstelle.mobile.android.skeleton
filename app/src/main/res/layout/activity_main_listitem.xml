@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:text="@{String.valueOf(item.expiry)}"
+            android:text="@{controller.getDateString(item.expiry)}"
             android:id="@+id/itemExpiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

@@ -242,5 +242,13 @@ public class MainActivity extends AppCompatActivity {
                         })
                 .execute(changedItem);
     }
+    public String getDateString(Long expiry){
+        Log.i("MainActivity getDateString","expiry: " + expiry);
+        if (expiry == 0){
+            return "Ohne Datum";
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return simpleDateFormat.format(new Date(expiry));
+    }
 
 }

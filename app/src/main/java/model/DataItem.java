@@ -1,6 +1,7 @@
 package model;
 
 import android.icu.text.SimpleDateFormat;
+import android.util.Log;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -159,10 +160,12 @@ public class DataItem implements Serializable {
     }
 
     public String getDateString(){
+        Log.i("DataItem getDateString","this.expiry: " + this.expiry + " this.name: " + this.name);
         if (this.expiry == 0){
-            return "Fälligkeitsdatum auswählen";
+            return "Datum und Uhrzeit";
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return simpleDateFormat.format(new Date(this.expiry));
     }
 }

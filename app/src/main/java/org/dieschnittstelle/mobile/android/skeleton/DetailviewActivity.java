@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -36,6 +37,7 @@ import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailvi
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import model.DataItem;
 
@@ -49,8 +51,6 @@ public class DetailviewActivity extends AppCompatActivity {
 
     DatePickerDialog datePicker;
     EditText expiryDate;
-//    Button btnGetExpiry;
-//    TextView expiryTextView;
     TimePickerDialog timePicker;
     EditText expiryTime;
 
@@ -95,39 +95,33 @@ public class DetailviewActivity extends AppCompatActivity {
             });
         }
 
-        // Date Picker Dialog
-//        expiryTextView = binding.getRoot().findViewById(R.id.expiryTextView);
-        expiryDate = binding.getRoot().findViewById(R.id.expiry);
-        expiryDate.setInputType(InputType.TYPE_NULL);
-        expiryDate.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int month = calendar.get(Calendar.MONTH);
-            int year = calendar.get(Calendar.YEAR);
-            datePicker = new DatePickerDialog(DetailviewActivity.this,
-                    (view, year1, monthOfYear, dayOfMonth) ->
-                            expiryDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year1), year, month, day);
-            item.setExpiry(calendar.getTimeInMillis());
-
-            datePicker.show();
-        });
-//        btnGetExpiry=findViewById(R.id.expiryBtn);
-//        btnGetExpiry.setOnClickListener(v -> expiryTextView.setText("Selected Date: "+ expiryDate.getText()));
-
-        // Time Picker Dialog
-        expiryTime = binding.getRoot().findViewById(R.id.expiryTime);
-        expiryTime.setInputType(InputType.TYPE_NULL);
-        expiryTime.setOnClickListener(v -> {
-            final Calendar cldr = Calendar.getInstance();
-            int hour = cldr.get(Calendar.HOUR_OF_DAY);
-            int minutes = cldr.get(Calendar.MINUTE);
-            timePicker = new TimePickerDialog(DetailviewActivity.this,
-                    (tp, sHour, sMinute) -> expiryTime.setText(sHour + ":" + sMinute), hour, minutes, true);
-            timePicker.show();
-        });
 
 
     }
+
+    public void setDateAndTime() {
+
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        new DatePickerDialog(this, (datePicker, hour, minute, seconds) -> {
+            calendar.set(hour, minute, seconds);
+            new TimePickerDialog(DetailviewActivity.this,
+                (timePicker, hour1, minute1) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hour1);
+                    calendar.set(Calendar.MINUTE, minute1);
+
+                    item.setExpiry(calendar.getTimeInMillis());
+                    TextView dateAndTime = findViewById(R.id.expiry);
+                    dateAndTime.setText(item.getDateString());
+                },0,0,true
+            ).show();
+        },year,month,day
+        ).show();
+    }
+
 
 
     public void onSaveItem(View view) {
