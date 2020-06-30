@@ -100,25 +100,30 @@ public class DetailviewActivity extends AppCompatActivity {
     }
 
     public void setDateAndTime() {
-
+        Log.i("DetailviewActivity","item.getExpiry: " + item.getExpiry());
         final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (item.getExpiry() > 0) {
+            calendar.setTimeInMillis(item.getExpiry());
+        }
+        int initYear = calendar.get(Calendar.YEAR);
+        int initMonth = calendar.get(Calendar.MONTH);
+        int initDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int initHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int initMinute = calendar.get(Calendar.MINUTE);
 
-        new DatePickerDialog(this, (datePicker, hour, minute, seconds) -> {
-            calendar.set(hour, minute, seconds);
+        new DatePickerDialog(this, (datePicker, year, month, day) -> {
+            calendar.set(year, month, day);
             new TimePickerDialog(DetailviewActivity.this,
-                (timePicker, hour1, minute1) -> {
-                    calendar.set(Calendar.HOUR_OF_DAY, hour1);
-                    calendar.set(Calendar.MINUTE, minute1);
+                (timePicker, hour, minute) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE, minute);
 
                     item.setExpiry(calendar.getTimeInMillis());
                     TextView dateAndTime = findViewById(R.id.expiry);
                     dateAndTime.setText(item.getDateString());
-                },0,0,true
+                },initHour,initMinute,true
             ).show();
-        },year,month,day
+        },initYear,initMonth,initDay
         ).show();
     }
 
@@ -140,7 +145,7 @@ public class DetailviewActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_options,menu);
+        getMenuInflater().inflate(R.menu.activity_detail_options,menu);
         return true;
     }
 
@@ -148,10 +153,6 @@ public class DetailviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addContact:selectAndAddContact();return true;
-            case R.id.doSomethingElse:
-                Toast.makeText(this,
-                        "Something else",
-                        Toast.LENGTH_SHORT).show();return true;
         }
         return super.onOptionsItemSelected(item);
     }

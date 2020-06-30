@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:text="Fälligkeitsdatum: "
+            android:text="@string/labelExpiry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </TextView>
@@ -97,12 +97,6 @@
             android:hint="Click to Change"
             android:textSize="20dp" />
     </LinearLayout>
-
-        <!--        app:hintEnabled="true"-->
-<!--        android:hint="Click to set"-->
-<!--        android:text="@{dataItem.getDateString()}"-->
-
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

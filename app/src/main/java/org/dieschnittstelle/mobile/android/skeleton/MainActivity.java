@@ -3,9 +3,10 @@ package org.dieschnittstelle.mobile.android.skeleton;
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,9 +33,6 @@ import java.util.List;
 
 import model.DataItem;
 import model.IDataItemCRUDOperations;
-import model.RetrofitDataItemCRUDOperationsImpl;
-import model.RoomDataItemCRUDOperationsImpl;
-import model.SimpleDataItemCRUDOperationsimpl;
 import tasks.CreateDataItemTask;
 import tasks.ReadAllDataItemsTask;
 import tasks.UpdateDataItemTask;
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private List<DataItem> itemsList = new ArrayList<>();
     private FloatingActionButton fab;
     private ProgressBar progressBar;
+    private Boolean sortFavourites = true;
 
 
     private IDataItemCRUDOperations crudOperations;
@@ -63,6 +63,29 @@ public class MainActivity extends AppCompatActivity {
                    this.initialiseView();
                 }
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_options,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.sortDate:
+                sortFavourites = false;
+                Toast.makeText(this,
+                        "sortDate",
+                        Toast.LENGTH_SHORT).show();return true;
+            case R.id.sortFavorite:
+                sortFavourites = true;
+                Toast.makeText(this,
+                        "sortFavorite",
+                        Toast.LENGTH_SHORT).show();return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     private void initialiseView() {
@@ -138,11 +161,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortListAndFocusItem(DataItem item) {
-
-        this.itemsList.sort(Comparator
-                .comparing(DataItem::isChecked)
-                .thenComparing(DataItem::isFavourite)
-                .thenComparing(DataItem::getName));
+        showFeedbackMessage("Sorting Favorites: " + sortFavourites);
+        if (sortFavourites) {
+            this.itemsList.sort(Comparator
+                    .comparing(DataItem::isChecked).reversed()
+                    .thenComparing(DataItem::isFavourite).reversed()
+                    .thenComparing(DataItem::getExpiry));
+        } else {
+            this.itemsList.sort(Comparator
+                    .comparing(DataItem::isChecked).reversed()
+                    .thenComparing(DataItem::getExpiry)
+                    .thenComparing(DataItem::isFavourite).reversed());
+        }
         this.listViewAdapter.notifyDataSetChanged();
 
         if(item != null) {

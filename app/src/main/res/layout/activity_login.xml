@@ -37,10 +37,16 @@
                     android:singleLine="true"/>
 
                 <Button
-                    android:id="@+id/emailLoginBtn"
+                    android:id="@+id/loginBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Anmelden"/>
+                <Button
+                    android:id="@+id/loginExitBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Abbruch"/>
+
 
             </LinearLayout>
         </LinearLayout>

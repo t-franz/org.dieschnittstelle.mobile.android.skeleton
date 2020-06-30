@@ -6,4 +6,8 @@
     <string name="favourite">wichtig</string>
     <string name="setExpiryDate">Fälligkeitsdatum auswählen</string>
     <string name="setExpiryTime">Uhrzeit</string>
+    <string name="datum">Datum:</string>
+    <string name="labelFavourite">Wichtig</string>
+    <string name="labelChecked">Erledigt</string>
+    <string name="labelExpiry">Fälligkeitsdatum:</string>
 </resources>

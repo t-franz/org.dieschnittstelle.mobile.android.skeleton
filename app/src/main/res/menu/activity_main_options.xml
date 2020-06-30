@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/addContact" android:title="ADD CONTACT" android:icon="@drawable/baseline_contacts_white_24dp" app:showAsAction="always"/>
-    <item android:id="@+id/doSomethingElse" android:title="DO SOMETHING ELSE" />
+    <item android:id="@+id/sortFavorite" android:title="Sort Favorite" />
+    <item android:id="@+id/sortDate" android:title="Sort Date" />
 </menu>
