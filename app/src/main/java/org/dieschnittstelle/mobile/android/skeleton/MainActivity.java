@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private List<DataItem> itemsList = new ArrayList<>();
     private FloatingActionButton fab;
     private ProgressBar progressBar;
-    private Boolean sortFavourites = true;
+    public Boolean sortFavourites = true;
 
 
     private IDataItemCRUDOperations crudOperations;
@@ -76,14 +76,12 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.sortDate:
                 sortFavourites = false;
-                Toast.makeText(this,
-                        "sortDate",
-                        Toast.LENGTH_SHORT).show();return true;
+                sortList();
+                break;
             case R.id.sortFavorite:
                 sortFavourites = true;
-                Toast.makeText(this,
-                        "sortFavorite",
-                        Toast.LENGTH_SHORT).show();return true;
+                sortList();
+                break;
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void sortListAndFocusItem(DataItem item) {
+    private void sortList() {
         showFeedbackMessage("Sorting Favorites: " + sortFavourites);
         if (sortFavourites) {
             this.itemsList.sort(Comparator
@@ -169,11 +167,27 @@ public class MainActivity extends AppCompatActivity {
                     .thenComparing(DataItem::getExpiry));
         } else {
             this.itemsList.sort(Comparator
-                    .comparing(DataItem::isChecked).reversed()
-                    .thenComparing(DataItem::getExpiry)
+                    .comparing(DataItem::isChecked)
+                    .thenComparing(DataItem::getExpiry).reversed()
                     .thenComparing(DataItem::isFavourite).reversed());
         }
         this.listViewAdapter.notifyDataSetChanged();
+    }
+
+    private void sortListAndFocusItem(DataItem item) {
+        sortList();
+//        if (sortFavourites) {
+//            this.itemsList.sort(Comparator
+//                    .comparing(DataItem::isChecked).reversed()
+//                    .thenComparing(DataItem::isFavourite).reversed()
+//                    .thenComparing(DataItem::getExpiry));
+//        } else {
+//            this.itemsList.sort(Comparator
+//                    .comparing(DataItem::isChecked)
+//                    .thenComparing(DataItem::getExpiry).reversed()
+//                    .thenComparing(DataItem::isFavourite).reversed());
+//        }
+//        this.listViewAdapter.notifyDataSetChanged();
 
         if(item != null) {
             ((ListView)this.listView).smoothScrollToPosition(this.listViewAdapter.getPosition(item));
