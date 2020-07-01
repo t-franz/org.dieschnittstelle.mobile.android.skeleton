@@ -250,9 +250,6 @@ public class DetailviewActivity extends AppCompatActivity {
             showFeedbackMessage("Contact Permissions have been granted!");
         }
 
-        // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr
-        // Kapitel Zugriff auf CONTACT_ID
-
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -275,6 +272,9 @@ public class DetailviewActivity extends AppCompatActivity {
                 if (phoneNumberType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
                     Log.i("DetailviewActivity","found mobile number: " + number);
                     contactPhoneText.setText(number);
+                    contactPhoneText.setOnClickListener(view -> {
+                        sendSMS(contactName, number);
+                    });
                 }
                 else {
                     Log.i("DetailViewActivity","found other number: " + number);
@@ -292,13 +292,31 @@ public class DetailviewActivity extends AppCompatActivity {
                 String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
                 Log.i("DetailViewActivity","email is: " + email);
                 contactEmailText.setText(email);
+                contactEmailText.setOnClickListener(view -> {
+                    sendMail(contactName, email);
+                });
             }
             Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
 
-            // Aufruf siehe 77ff item.getContacts().forEach(contactUriAsString -> { ...
         }
 
         contactsWrapper.addView(listitemLayout);
+    }
+
+    private void sendSMS(String name, String phoneNumber) {
+        Intent sendSMSIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
+        sendSMSIntent.putExtra("sms_body","Hallo " + name + "!");
+        startActivity(sendSMSIntent);
+    }
+
+    private void sendMail(String name, String emailAddress) {
+
+        Intent sendMailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", emailAddress, null));
+        sendMailIntent.putExtra(Intent.EXTRA_SUBJECT, "This is my subject text");
+        sendMailIntent.putExtra(Intent.EXTRA_TEXT, "Hello " + name);
+        startActivity(Intent.createChooser(sendMailIntent, null));
+
     }
 
     private void showFeedbackMessage(String msg) {
