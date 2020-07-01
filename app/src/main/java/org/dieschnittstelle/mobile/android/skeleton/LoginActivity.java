@@ -4,19 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityDetailviewBinding;
 import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,7 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setEnabled(false);
         loginEmail.setError("Bitte E-Mail-Adresse eintragen");
 
-        // TMP REDIRECT;
+        ((DataItemApplication) getApplication())
+                .verifyWebappAvailable(available -> {
+                        if (!available) {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
+                    }
+                );
+        // TMP REDIRECT:
         // startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
         loginEmail.setOnFocusChangeListener((v, hasFocus) -> {
@@ -82,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-            TextWatcher loginWatcher = new TextWatcher() {
+        TextWatcher loginWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 loginError.setVisibility(View.GONE);
