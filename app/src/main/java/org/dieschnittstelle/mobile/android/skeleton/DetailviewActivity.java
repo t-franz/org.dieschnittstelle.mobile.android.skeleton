@@ -95,7 +95,7 @@ public class DetailviewActivity extends AppCompatActivity {
 
         binding.setController(this);
 
-        this.showFeedbackMessage("Item has contacts: " + this.item.getContacts());
+        //this.showFeedbackMessage("Item has contacts: " + this.item.getContacts());
 
         if (item.getContacts() != null && item.getContacts().size() > 0) {
             item.getContacts().forEach(contactUriAsString -> {
@@ -224,9 +224,6 @@ public class DetailviewActivity extends AppCompatActivity {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
         }
-
-
-
 
         showContactDetails(contactId);
     }

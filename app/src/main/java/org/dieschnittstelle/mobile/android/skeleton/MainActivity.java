@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public Boolean sortFavourites = true;
     private IDataItemCRUDOperations crudOperations;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,10 +119,20 @@ public class MainActivity extends AppCompatActivity {
                 binding.setItem(item);
                 binding.setController(MainActivity.this);
 
-                // Textfarbe ändern bei Überfälligkeit nach Zufallskriterium
+                // Textfarbe ändern bei Überfälligkeit
                 TextView itemName = binding.getRoot().findViewById(R.id.itemName);
-                if (System.currentTimeMillis() % 2 == 0) {
+                TextView itemDate = binding.getRoot().findViewById(R.id.itemExpiry);
+
+                Log.i("MainActivity", "name: " + item.getName() +" getView: " + ( item.getExpiry() - System.currentTimeMillis() ) );
+
+                int DefaultButtonColor = itemName.getTextColors().getDefaultColor();
+                if (System.currentTimeMillis() > item.getExpiry() && !item.isChecked() ) {
                     itemName.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
+                    itemDate.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
+                } else {
+                    // int DefaultButtonColor = itemName.getTextColors().getDefaultColor();
+                    itemName.setTextColor(DefaultButtonColor);
+                    itemDate.setTextColor(DefaultButtonColor);
                 }
 
                 return currentView;
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortList() {
-        showFeedbackMessage("Sorting Favorites: " + sortFavourites);
+        showFeedbackMessage("Sorting Favorites? " + sortFavourites);
         if (sortFavourites) {
             this.itemsList.sort(Comparator
                     .comparing(DataItem::isChecked).reversed()
@@ -175,18 +186,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void sortListAndFocusItem(DataItem item) {
         sortList();
-//        if (sortFavourites) {
-//            this.itemsList.sort(Comparator
-//                    .comparing(DataItem::isChecked).reversed()
-//                    .thenComparing(DataItem::isFavourite).reversed()
-//                    .thenComparing(DataItem::getExpiry));
-//        } else {
-//            this.itemsList.sort(Comparator
-//                    .comparing(DataItem::isChecked)
-//                    .thenComparing(DataItem::getExpiry).reversed()
-//                    .thenComparing(DataItem::isFavourite).reversed());
-//        }
-//        this.listViewAdapter.notifyDataSetChanged();
 
         if(item != null) {
             ((ListView)this.listView).smoothScrollToPosition(this.listViewAdapter.getPosition(item));
