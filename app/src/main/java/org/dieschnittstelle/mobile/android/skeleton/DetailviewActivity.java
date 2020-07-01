@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,11 +49,12 @@ public class DetailviewActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM = "item";
     public static final int CALL_CONTACT_PICKER = 0;
-
     private DataItem item;
     private ActivityDetailviewBinding binding;
-    private IDataItemCRUDOperations crudOperations;
 
+    private ViewGroup contactsWrapper;
+
+//    private IDataItemCRUDOperations crudOperations;
 //    DatePickerDialog datePicker;
 //    EditText expiryDate;
 //    TimePickerDialog timePicker;
@@ -67,6 +69,7 @@ public class DetailviewActivity extends AppCompatActivity {
         FloatingActionButton fabDelete = binding.getRoot().findViewById(R.id.fabDelete);
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
        // fab.setEnabled(false);
+        contactsWrapper = findViewById(R.id.contactsWrapper);
 
 
 
@@ -191,8 +194,7 @@ public class DetailviewActivity extends AppCompatActivity {
     }
 
     private void selectAndAddContact() {
-        Intent pickContactIntent = new Intent(Intent.ACTION_PICK,
-                ContactsContract.Contacts.CONTENT_URI);
+        Intent pickContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(pickContactIntent,CALL_CONTACT_PICKER);
     }
 
@@ -208,12 +210,23 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private void addSelectedContactToContacts(Uri contactId) {
 
+
+
         if (item.getContacts() == null) {
             item.setContacts(new ArrayList<>());
         }
         if (item.getContacts().indexOf(contactId.toString()) == -1) {
             item.getContacts().add(contactId.toString());
         }
+
+        Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
+        if (cursor != null && cursor.moveToFirst()) {
+            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+        }
+
+
+
 
         showContactDetails(contactId);
     }
@@ -225,6 +238,12 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private void showContactDetails(Uri contactId) {
 
+        final ViewGroup listitemLayout = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_detailview_contacts, null);
+        final TextView contactNameText = listitemLayout.findViewById(R.id.contactName);
+        final TextView contactEmailText = listitemLayout.findViewById(R.id.contactEmail);
+        final TextView contactPhoneText = listitemLayout.findViewById(R.id.contactPhone);
+
+
         int hasReadContactsPermission = checkSelfPermission(Manifest.permission.READ_CONTACTS);
         if (hasReadContactsPermission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},4);
@@ -234,15 +253,17 @@ public class DetailviewActivity extends AppCompatActivity {
             showFeedbackMessage("Contact Permissions have been granted!");
         }
 
+        // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr
+        // Kapitel Zugriff auf CONTACT_ID
+
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
+
         if (cursor != null && cursor.moveToFirst()) {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-
+            contactNameText.setText(contactName);
             showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
 
-            // Zugriff auf Telefonnummer und Mail-Adresse siehe Aufzeichnung letztes Jahr
-            // Kapitel Zugriff auf CONTACT_ID
 
             Cursor phoneCursor = getContentResolver().query(
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -256,6 +277,7 @@ public class DetailviewActivity extends AppCompatActivity {
 
                 if (phoneNumberType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
                     Log.i("DetailviewActivity","found mobile number: " + number);
+                    contactPhoneText.setText(number);
                 }
                 else {
                     Log.i("DetailViewActivity","found other number: " + number);
@@ -272,11 +294,14 @@ public class DetailviewActivity extends AppCompatActivity {
             while (emailCursor.moveToNext()) {
                 String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
                 Log.i("DetailViewActivity","email is: " + email);
+                contactEmailText.setText(email);
             }
             Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
 
             // Aufruf siehe 77ff item.getContacts().forEach(contactUriAsString -> { ...
         }
+
+        contactsWrapper.addView(listitemLayout);
     }
 
     private void showFeedbackMessage(String msg) {

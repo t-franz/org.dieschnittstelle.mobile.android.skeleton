@@ -94,9 +94,25 @@
             android:onClick="@{() -> controller.setDateAndTime()}"
             android:text="@{String.valueOf(controller.item.expiry)}"
             app:hintEnabled="true"
-            android:hint="Click to Change"
-            android:textSize="20dp" />
+            android:hint="@string/labelChangeExpiry"
+            android:textSize="20sp" />
     </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        style="@android:style/Widget.DeviceDefault.ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintTop_toBottomOf="@id/itemDateWrapper"
+        android:text = "Kontakte"
+        android:textSize = "20sp">
+        <LinearLayout
+            android:id="@+id/contactsWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
