@@ -50,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private ProgressBar progressBar;
     public Boolean sortFavourites = true;
-
-
     private IDataItemCRUDOperations crudOperations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

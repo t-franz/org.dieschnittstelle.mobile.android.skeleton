@@ -2,8 +2,10 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -40,6 +42,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import model.DataItem;
+import model.IDataItemCRUDOperations;
 
 public class DetailviewActivity extends AppCompatActivity {
 
@@ -48,11 +51,12 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private DataItem item;
     private ActivityDetailviewBinding binding;
+    private IDataItemCRUDOperations crudOperations;
 
-    DatePickerDialog datePicker;
-    EditText expiryDate;
-    TimePickerDialog timePicker;
-    EditText expiryTime;
+//    DatePickerDialog datePicker;
+//    EditText expiryDate;
+//    TimePickerDialog timePicker;
+//    EditText expiryTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,10 +64,11 @@ public class DetailviewActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_detailview);
 
         FloatingActionButton fab = binding.getRoot().findViewById(R.id.fab);
+        FloatingActionButton fabDelete = binding.getRoot().findViewById(R.id.fabDelete);
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
        // fab.setEnabled(false);
 
-        FloatingActionButton fabDelete = binding.getRoot().findViewById(R.id.fabDelete);
+
 
         itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -137,6 +142,34 @@ public class DetailviewActivity extends AppCompatActivity {
         this.setResult(Activity.RESULT_OK, returnData);
         finish();
     }
+
+    public void onDeleteItem(View view) {
+//        Intent returnData = new Intent();
+//
+//        returnData.putExtra(ARG_ITEM,this.item);
+//
+//        this.setResult(Activity.RESULT_OK, returnData);
+//        finish();
+
+        if (this.item.getId() == -1) return;
+
+        DialogInterface.OnClickListener dialogClickListener = (dialogInterface, i) -> {
+            if (i == DialogInterface.BUTTON_POSITIVE) {
+                this.showFeedbackMessage("Sorry, cant delete item " + this.item.getName() + " yet.");
+            }
+            else if (i == DialogInterface.BUTTON_NEGATIVE){
+                this.showFeedbackMessage("Item " + this.item.getName() + " not deleted.");
+            }
+        };
+
+        new AlertDialog.Builder(this)
+                .setMessage("Delete Item " + item.getName() + "?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener)
+                .show();
+    }
+
+
     
 
     public DataItem getItem() {
