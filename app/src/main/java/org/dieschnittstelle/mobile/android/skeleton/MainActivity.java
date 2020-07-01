@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortList() {
-        //showFeedbackMessage("Sorting Favorites? " + sortFavourites);
 
         if (sortFavourites) {
             this.itemsList.sort(Comparator

@@ -22,7 +22,7 @@
                     android:id="@+id/loginEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="E-Mail"
+                    android:hint="@string/hintEmail"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"/>
@@ -31,8 +31,8 @@
                     android:id="@+id/loginPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Passwort"
-                    android:inputType="textPassword"
+                    android:hint="@string/hintPasswort"
+                    android:inputType="numberPassword"
                     android:maxLines="1"
                     android:singleLine="true"/>
 
@@ -40,12 +40,16 @@
                     android:id="@+id/loginBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Anmelden"/>
-                <Button
-                    android:id="@+id/loginExitBtn"
+                    android:text="@string/labelLogin"/>
+
+                <TextView
+                    android:id="@+id/loginError"
+                    android:text="@string/labelLoginError"
+                    android:textColor="@color/colorAccent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Abbruch"/>
+                    android:textSize="20sp"
+                    android:textAlignment="center"/>
 
 
             </LinearLayout>

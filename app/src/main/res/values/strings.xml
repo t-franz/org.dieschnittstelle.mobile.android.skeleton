@@ -11,4 +11,8 @@
     <string name="labelChecked">Erledigt</string>
     <string name="labelExpiry">Fälligkeitsdatum:</string>
     <string name="labelChangeExpiry">Click to Change</string>
+    <string name="labelLogin">Anmelden</string>
+    <string name="hintPasswort">Passwort eingeben</string>
+    <string name="hintEmail">E-Mail eingeben</string>
+    <string name="labelLoginError">Wrong credentials</string>
 </resources>

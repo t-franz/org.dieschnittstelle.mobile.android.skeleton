@@ -180,6 +180,7 @@ public class DetailviewActivity extends AppCompatActivity {
         startActivityForResult(pickContactIntent,CALL_CONTACT_PICKER);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CALL_CONTACT_PICKER && resultCode == Activity.RESULT_OK) {
