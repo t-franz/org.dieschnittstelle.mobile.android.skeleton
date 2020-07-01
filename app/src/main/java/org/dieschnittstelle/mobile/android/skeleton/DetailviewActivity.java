@@ -54,11 +54,6 @@ public class DetailviewActivity extends AppCompatActivity {
 
     private ViewGroup contactsWrapper;
 
-//    private IDataItemCRUDOperations crudOperations;
-//    DatePickerDialog datePicker;
-//    EditText expiryDate;
-//    TimePickerDialog timePicker;
-//    EditText expiryTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,24 +63,21 @@ public class DetailviewActivity extends AppCompatActivity {
         FloatingActionButton fab = binding.getRoot().findViewById(R.id.fab);
         FloatingActionButton fabDelete = binding.getRoot().findViewById(R.id.fabDelete);
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
-       // fab.setEnabled(false);
         contactsWrapper = findViewById(R.id.contactsWrapper);
 
+        //fab.setEnabled(false);
 
 
-        itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (textView.getText().toString().trim().length() == 0) {
-                        textView.setError("You need to input a name for the item!");
-                    }
-                    else {
-                        fab.setEnabled(true);
-                    }
+        itemName.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (textView.getText().toString().trim().length() == 0) {
+                    textView.setError("You need to input a name for the item!");
                 }
-                return false;
+                else {
+                    fab.setEnabled(true);
+                }
             }
+            return false;
         });
 
         this.item = (DataItem)getIntent().getSerializableExtra(ARG_ITEM);
@@ -94,8 +86,6 @@ public class DetailviewActivity extends AppCompatActivity {
         }
 
         binding.setController(this);
-
-        //this.showFeedbackMessage("Item has contacts: " + this.item.getContacts());
 
         if (item.getContacts() != null && item.getContacts().size() > 0) {
             item.getContacts().forEach(contactUriAsString -> {
@@ -138,21 +128,13 @@ public class DetailviewActivity extends AppCompatActivity {
 
 
     public void onSaveItem(View view) {
-        Intent returnData = new Intent();
-
-        returnData.putExtra(ARG_ITEM,this.item);
-
-        this.setResult(Activity.RESULT_OK, returnData);
-        finish();
+            Intent returnData = new Intent();
+            returnData.putExtra(ARG_ITEM,this.item);
+            this.setResult(Activity.RESULT_OK, returnData);
+            finish();
     }
 
     public void onDeleteItem(View view) {
-//        Intent returnData = new Intent();
-//
-//        returnData.putExtra(ARG_ITEM,this.item);
-//
-//        this.setResult(Activity.RESULT_OK, returnData);
-//        finish();
 
         if (this.item.getId() == -1) return;
 
@@ -209,8 +191,6 @@ public class DetailviewActivity extends AppCompatActivity {
     }
 
     private void addSelectedContactToContacts(Uri contactId) {
-
-
 
         if (item.getContacts() == null) {
             item.setContacts(new ArrayList<>());
@@ -273,7 +253,7 @@ public class DetailviewActivity extends AppCompatActivity {
                     Log.i("DetailviewActivity","found mobile number: " + number);
                     contactPhoneText.setText(number);
                     contactPhoneText.setOnClickListener(view -> {
-                        sendSMS(contactName, number);
+                        sendSMS(number, item.getName(), item.getDescription());
                     });
                 }
                 else {
@@ -293,7 +273,7 @@ public class DetailviewActivity extends AppCompatActivity {
                 Log.i("DetailViewActivity","email is: " + email);
                 contactEmailText.setText(email);
                 contactEmailText.setOnClickListener(view -> {
-                    sendMail(contactName, email);
+                    sendMail(email, item.getName(), item.getDescription());
                 });
             }
             Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
@@ -303,18 +283,18 @@ public class DetailviewActivity extends AppCompatActivity {
         contactsWrapper.addView(listitemLayout);
     }
 
-    private void sendSMS(String name, String phoneNumber) {
+    private void sendSMS(String phoneNumber, String title, String description ) {
         Intent sendSMSIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
-        sendSMSIntent.putExtra("sms_body","Hallo " + name + "!");
+        sendSMSIntent.putExtra("sms_body",title + ": " + description);
         startActivity(sendSMSIntent);
     }
 
-    private void sendMail(String name, String emailAddress) {
+    private void sendMail(String emailAddress, String name, String description) {
 
         Intent sendMailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto", emailAddress, null));
-        sendMailIntent.putExtra(Intent.EXTRA_SUBJECT, "This is my subject text");
-        sendMailIntent.putExtra(Intent.EXTRA_TEXT, "Hello " + name);
+        sendMailIntent.putExtra(Intent.EXTRA_SUBJECT, name);
+        sendMailIntent.putExtra(Intent.EXTRA_TEXT, description);
         startActivity(Intent.createChooser(sendMailIntent, null));
 
     }
