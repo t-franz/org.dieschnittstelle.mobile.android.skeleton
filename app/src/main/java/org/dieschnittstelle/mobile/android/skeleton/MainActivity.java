@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView itemId = binding.getRoot().findViewById(R.id.itemId);
 
                 int defaultColor = itemId.getTextColors().getDefaultColor();
-                Log.i("MainActivity","Default-Colors: " + defaultColor);
+
                 assert item != null;
                 if (System.currentTimeMillis() > item.getExpiry() && !item.isChecked() ) {
                     itemName.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         ((ListView)this.listView).setOnItemClickListener((adapterView, view, i, l) -> {
             DataItem item = listViewAdapter.getItem(i);
-            Log.i("MainActivity","setOnItemClickListener getItem: " + item.getName());
+            //Log.i("MainActivity","setOnItemClickListener getItem: " + item.getName());
             onListitemSelected(item);
         });
 
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateItemAndUpdateList(DataItem changedItem) {
-        Log.i("MainActivity","updateItemAndUpdateList changedItem: " + changedItem.getName());
+        //Log.i("MainActivity","updateItemAndUpdateList changedItem: " + changedItem.getName());
         new UpdateDataItemTask(progressBar,crudOperations,updated -> {
           handleResultFromUpdateTask(changedItem,updated);
         }).execute(changedItem);

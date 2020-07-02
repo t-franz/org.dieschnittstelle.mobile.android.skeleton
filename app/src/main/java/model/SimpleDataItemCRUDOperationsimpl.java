@@ -45,7 +45,12 @@ public class SimpleDataItemCRUDOperationsimpl implements IDataItemCRUDOperations
     }
 
     @Override
-    public boolean deleteDataItem(long id) {
+    public boolean deleteDataItem(DataItem item) {
         return false;
     }
+
+//    @Override
+//    public boolean deleteDataItem(long id) {
+//        return false;
+//    }
 }

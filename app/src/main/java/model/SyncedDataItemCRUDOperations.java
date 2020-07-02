@@ -1,6 +1,7 @@
 package model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -40,9 +41,10 @@ public class SyncedDataItemCRUDOperations implements IDataItemCRUDOperations {
     }
 
     @Override
-    public boolean deleteDataItem(long id) {
-        if (localCRUD.deleteDataItem(id)) {
-            return remoteCRUD.deleteDataItem(id);
+    public boolean deleteDataItem(DataItem item) {
+        //Log.i("SyncedDataItemCRUDOperations","deleteDataItem: " + id);
+        if (localCRUD.deleteDataItem(item)) {
+            return remoteCRUD.deleteDataItem(item);
         }
         return false;
     }

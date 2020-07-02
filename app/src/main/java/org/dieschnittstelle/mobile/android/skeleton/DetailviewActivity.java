@@ -46,13 +46,16 @@ import java.util.Date;
 
 import model.DataItem;
 import model.IDataItemCRUDOperations;
+import tasks.DeleteDataItemTask;
 
 public class DetailviewActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM = "item";
     public static final int CALL_CONTACT_PICKER = 0;
+    private static final int STATUS_DELETED = 2;
     private DataItem item;
     private ActivityDetailviewBinding binding;
+    private IDataItemCRUDOperations crudOperations;
 
     private ViewGroup contactsWrapper;
 
@@ -95,18 +98,6 @@ public class DetailviewActivity extends AppCompatActivity {
                 }
             }
         });
-//        itemName.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-//            Log.i("DetailViewActivity", "actionId = " + actionId);
-//            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-//                if (textView.getText().toString().trim().length() == 0) {
-//                    textView.setError("You need to input a name for the item!");
-//                }
-//                else {
-//                    fab.setEnabled(true);
-//                }
-//            }
-//            return false;
-//        });
 
         this.item = (DataItem)getIntent().getSerializableExtra(ARG_ITEM);
         if (this.item == null) {
@@ -159,7 +150,7 @@ public class DetailviewActivity extends AppCompatActivity {
         if (this.item.getExpiry() == 0) {
             this.item.setExpiry(System.currentTimeMillis()+ (86400 * 7 * 1000));
         }
-        Log.i("DetailViewActivity","onSaveItem - expire: " + this.item.getExpiry());
+        //Log.i("DetailViewActivity","onSaveItem - expire: " + this.item.getExpiry());
         Intent returnData = new Intent();
         returnData.putExtra(ARG_ITEM,this.item);
         this.setResult(Activity.RESULT_OK, returnData);
@@ -172,7 +163,11 @@ public class DetailviewActivity extends AppCompatActivity {
 
         DialogInterface.OnClickListener dialogClickListener = (dialogInterface, i) -> {
             if (i == DialogInterface.BUTTON_POSITIVE) {
+
                 this.showFeedbackMessage("Sorry, cant delete item " + this.item.getName() + " yet.");
+
+
+
             }
             else if (i == DialogInterface.BUTTON_NEGATIVE){
                 this.showFeedbackMessage("Item " + this.item.getName() + " not deleted.");
@@ -186,8 +181,6 @@ public class DetailviewActivity extends AppCompatActivity {
                 .show();
     }
 
-
-    
 
     public DataItem getItem() {
         return item;

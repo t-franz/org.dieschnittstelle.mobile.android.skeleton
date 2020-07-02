@@ -7,11 +7,13 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -29,6 +31,9 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
 
         @PUT("api/todos/{id}")
         public Call<DataItem> updateDataItem(@Path("id") long id, @Body DataItem item);
+
+        @DELETE("/api/todos/{id}")
+        Call<Boolean> deleteDataItem(@Path("id") long id);
     }
 
     private TodoWebAPI webAPI;
@@ -83,7 +88,17 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
     }
 
     @Override
-    public boolean deleteDataItem(long id) {
+    public boolean deleteDataItem(DataItem item) {
+
+        try {
+            if(webAPI.deleteDataItem(item.getId()).execute().body()!=null){
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e("RetrofitCRUD","got exception: " + e);
+            return false;
+        }
         return false;
+
     }
 }
