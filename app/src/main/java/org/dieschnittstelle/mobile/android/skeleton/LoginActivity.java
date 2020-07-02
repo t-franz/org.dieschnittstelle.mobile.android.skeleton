@@ -40,29 +40,33 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setEnabled(false);
         loginEmail.setError("Bitte E-Mail-Adresse eintragen");
 
-        ((DataItemApplication) getApplication())
-                .verifyWebappAvailable(available -> {
+        // REMOVE ####################
+        loginEmail.setText("s@bht.de");
+        loginPassword.setText("000000");
+        loginBtn.setEnabled(true);
+        // REMOVE ####################
+
+        ((DataItemApplication) getApplication()).verifyWebappAvailable(available -> {
                         if (!available) {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                     }
                 );
-        // TMP REDIRECT:
-        // startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(loginEmail.getText().toString().equals("a@bc.de") &&
-                        loginPassword.getText().toString().equals("123456")) {
-                    loginError.setVisibility(View.GONE);
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                }
-                else{
-                    loginError.setVisibility(View.VISIBLE);
-                }
+        loginBtn.setOnClickListener(v -> {
+
+            String email = loginEmail.getText().toString();
+            String password = loginPassword.getText().toString();
+
+            if(email.equals("s@bht.de") && password.equals("000000")) {
+                loginError.setVisibility(View.GONE);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+            else{
+                loginError.setVisibility(View.VISIBLE);
             }
         });
+
 
 
         loginEmail.setOnFocusChangeListener((v, hasFocus) -> {

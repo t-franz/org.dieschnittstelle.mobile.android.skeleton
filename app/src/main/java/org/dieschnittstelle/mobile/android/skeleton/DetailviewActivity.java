@@ -13,7 +13,9 @@ import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -65,20 +67,46 @@ public class DetailviewActivity extends AppCompatActivity {
         EditText itemName = binding.getRoot().findViewById(R.id.itemName);
         contactsWrapper = findViewById(R.id.contactsWrapper);
 
-        //fab.setEnabled(false);
+        fab.setEnabled(false);
 
-
-        itemName.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                if (textView.getText().toString().trim().length() == 0) {
-                    textView.setError("You need to input a name for the item!");
+        TextWatcher nameWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (itemName.getText().toString().trim().length() == 0) {
+                    itemName.setError("You need to input a name for the item!");
+                    fab.setEnabled(false);
                 }
                 else {
                     fab.setEnabled(true);
                 }
             }
-            return false;
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+        itemName.addTextChangedListener(nameWatcher);
+
+        itemName.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                if (itemName.getText().toString().trim().length() == 0) {
+                    itemName.setError("You need to input a name for the item!");
+                    fab.setEnabled(false);
+                }
+            }
         });
+//        itemName.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+//            Log.i("DetailViewActivity", "actionId = " + actionId);
+//            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+//                if (textView.getText().toString().trim().length() == 0) {
+//                    textView.setError("You need to input a name for the item!");
+//                }
+//                else {
+//                    fab.setEnabled(true);
+//                }
+//            }
+//            return false;
+//        });
 
         this.item = (DataItem)getIntent().getSerializableExtra(ARG_ITEM);
         if (this.item == null) {
@@ -128,10 +156,14 @@ public class DetailviewActivity extends AppCompatActivity {
 
 
     public void onSaveItem(View view) {
-            Intent returnData = new Intent();
-            returnData.putExtra(ARG_ITEM,this.item);
-            this.setResult(Activity.RESULT_OK, returnData);
-            finish();
+        if (this.item.getExpiry() == 0) {
+            this.item.setExpiry(System.currentTimeMillis()+ (86400 * 7 * 1000));
+        }
+        Log.i("DetailViewActivity","onSaveItem - expire: " + this.item.getExpiry());
+        Intent returnData = new Intent();
+        returnData.putExtra(ARG_ITEM,this.item);
+        this.setResult(Activity.RESULT_OK, returnData);
+        finish();
     }
 
     public void onDeleteItem(View view) {
@@ -203,7 +235,6 @@ public class DetailviewActivity extends AppCompatActivity {
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
         if (cursor != null && cursor.moveToFirst()) {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
         }
 
         showContactDetails(contactId);

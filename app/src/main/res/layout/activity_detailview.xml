@@ -22,7 +22,9 @@
             android:id="@+id/itemName"
             android:singleLine="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
             <requestFocus />
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,7 +37,9 @@
         <CheckBox
             android:checked="@={controller.item.checked}"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
         <TextView
             android:text="@string/checked"
             android:layout_width="wrap_content"

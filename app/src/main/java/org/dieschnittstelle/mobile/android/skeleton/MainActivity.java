@@ -2,6 +2,7 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -123,15 +124,19 @@ public class MainActivity extends AppCompatActivity {
                 // Textfarbe ändern bei Überfälligkeit
                 TextView itemName = binding.getRoot().findViewById(R.id.itemName);
                 TextView itemDate = binding.getRoot().findViewById(R.id.itemExpiry);
+                TextView itemId = binding.getRoot().findViewById(R.id.itemId);
 
-                int DefaultButtonColor = itemName.getTextColors().getDefaultColor();
+                int defaultColor = itemId.getTextColors().getDefaultColor();
+                Log.i("MainActivity","Default-Colors: " + defaultColor);
                 assert item != null;
                 if (System.currentTimeMillis() > item.getExpiry() && !item.isChecked() ) {
                     itemName.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
                     itemDate.setTextColor(getResources().getColor(R.color.colorAccent,getContext().getTheme()));
                 } else {
-                    itemName.setTextColor(DefaultButtonColor);
-                    itemDate.setTextColor(DefaultButtonColor);
+                    itemName.setTextColor(defaultColor);
+                    itemDate.setTextColor(defaultColor);
+//                    itemName.setTextColor(getResources().getColor(R.color.design_default_color_primary_dark ,getContext().getTheme()));
+//                    itemDate.setTextColor(getResources().getColor(R.color.design_default_color_primary,getContext().getTheme()));
                 }
 
                 return currentView;
@@ -143,12 +148,10 @@ public class MainActivity extends AppCompatActivity {
 
         ((ListView)this.listView).setAdapter(this.listViewAdapter);
 
-        ((ListView)this.listView).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DataItem item = listViewAdapter.getItem(i);
-                onListitemSelected(item);
-            }
+        ((ListView)this.listView).setOnItemClickListener((adapterView, view, i, l) -> {
+            DataItem item = listViewAdapter.getItem(i);
+            Log.i("MainActivity","setOnItemClickListener getItem: " + item.getName());
+            onListitemSelected(item);
         });
 
         this.fab.setOnClickListener((view) -> {
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateItemAndUpdateList(DataItem changedItem) {
-
+        Log.i("MainActivity","updateItemAndUpdateList changedItem: " + changedItem.getName());
         new UpdateDataItemTask(progressBar,crudOperations,updated -> {
           handleResultFromUpdateTask(changedItem,updated);
         }).execute(changedItem);
@@ -284,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
                 .execute(changedItem);
     }
     public String getDateString(Long expiry){
-        Log.i("MainActivity getDateString","expiry: " + expiry);
+
+        //Log.i("MainActivity getDateString","expiry: " + expiry);
         if (expiry == 0){
             return "Ohne Datum";
         }

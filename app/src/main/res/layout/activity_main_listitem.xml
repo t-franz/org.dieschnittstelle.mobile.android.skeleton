@@ -21,7 +21,6 @@
             android:id="@+id/itemId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
             android:padding="10sp"/>
         <TextView
             android:text="@{item.name}"
@@ -70,12 +69,14 @@
         <TextView
             android:text="@string/datum"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="10sp"/>
         <TextView
             android:text="@{controller.getDateString(item.expiry)}"
             android:id="@+id/itemExpiry"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="10sp"/>
     </LinearLayout>
 
 </LinearLayout>
