@@ -144,8 +144,6 @@ public class DetailviewActivity extends AppCompatActivity {
         ).show();
     }
 
-
-
     public void onSaveItem(View view) {
         if (this.item.getExpiry() == 0) {
             this.item.setExpiry(System.currentTimeMillis()+ (86400 * 7 * 1000));
@@ -155,8 +153,6 @@ public class DetailviewActivity extends AppCompatActivity {
         this.setResult(Activity.RESULT_OK, returnData);
         finish();
     }
-
-
 
     public void onDeleteItem(View view) {
 
@@ -208,6 +204,7 @@ public class DetailviewActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == CALL_CONTACT_PICKER && resultCode == Activity.RESULT_OK) {
@@ -235,6 +232,26 @@ public class DetailviewActivity extends AppCompatActivity {
         showContactDetails(contactId);
     }
 
+    public void removeSelectedContactFromContacts(View contactId) {
+        showFeedbackMessage("contactID: " + contactId);
+//        if (item.getContacts().indexOf(contactId.toString()) == -1) {
+//            item.getContacts().add(contactId.toString());
+//        }
+    }
+
+
+
+//    public void deleteSelectedContact(Uri contactId){
+//        int position = 0;
+//        for (String currentId : this.contacts){
+//            if (currentId == id){
+//                break;
+//            }
+//            position++;
+//        }
+//        this.contacts.remove(position);
+//    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -246,6 +263,7 @@ public class DetailviewActivity extends AppCompatActivity {
         final TextView contactNameText = listitemLayout.findViewById(R.id.contactName);
         final TextView contactEmailText = listitemLayout.findViewById(R.id.contactEmail);
         final TextView contactPhoneText = listitemLayout.findViewById(R.id.contactPhone);
+        final TextView contactRemoveText = listitemLayout.findViewById(R.id.contactRemove);
 
 
         int hasReadContactsPermission = checkSelfPermission(Manifest.permission.READ_CONTACTS);
@@ -281,6 +299,7 @@ public class DetailviewActivity extends AppCompatActivity {
                     contactPhoneText.setText(number);
                     contactPhoneText.setOnClickListener(view -> {
                         sendSMS(number, item.getName(), item.getDescription());
+                        //composeSMS(number,item.getName(), item.getDescription());
                     });
                 }
                 else {
@@ -305,16 +324,55 @@ public class DetailviewActivity extends AppCompatActivity {
             }
             Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
 
+            contactRemoveText.setOnClickListener(view -> {
+                Log.i("DetaiViewActivity","internalContactId: " + internalContactId );
+                Log.i("DetaiViewActivity","contactId: " + contactId );
+                Log.i("DetaiViewActivity","item.getContacts(): " + item.getContacts());
+                int position = 0;
+                Log.i("DetaiViewActivity","deleteContact: " + internalContactId );
+                for (String currentId : item.getContacts()){
+                    Log.i("DetaiViewActivity","deleteContactFOR: " + currentId );
+                    if (currentId == internalContactId){
+                        break;
+                    }
+                    position++;
+                }
+            //this.contacts.remove(position);
+            });
+
+
         }
 
         contactsWrapper.addView(listitemLayout);
     }
+
+//    public void deleteContact(String contactId) {
+//            int position = 0;
+//            Log.i("DetaiViewActivity","deleteContact: " + contactId );
+//            for (String currentId : item.getContacts()){
+//                Log.i("DetaiViewActivity","deleteContactFOR: " + currentId );
+//                if (currentId == contactId){
+//                    break;
+//                }
+//                position++;
+//            }
+//            //this.contacts.remove(position);
+//        }
+//    }
 
     private void sendSMS(String phoneNumber, String title, String description ) {
         Intent sendSMSIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
         sendSMSIntent.putExtra("sms_body",title + ": " + description);
         startActivity(sendSMSIntent);
     }
+
+//    protected void composeSMS(String receiver, String title, String description) {
+//        Uri smsUri = Uri.parse("smsto:" + receiver);
+//        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
+//        smsIntent.putExtra("sms_body", title + ": " + description);
+//
+//        startActivity(smsIntent);
+//    }
 
     private void sendMail(String emailAddress, String name, String description) {
 

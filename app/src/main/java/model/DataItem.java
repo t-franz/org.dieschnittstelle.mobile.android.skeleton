@@ -130,6 +130,17 @@ public class DataItem implements Serializable {
         this.contacts = contacts;
     }
 
+//    public void deleteContact(String id){
+//        int position = 0;
+//        for (String currentId : this.contacts){
+//            if (currentId == id){
+//                break;
+//            }
+//            position++;
+//        }
+//        this.contacts.remove(position);
+//    }
+
     public String getContactsStr() {
         beforePersist();
         return contactsStr;
