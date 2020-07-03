@@ -35,6 +35,7 @@ import java.util.List;
 import model.DataItem;
 import model.IDataItemCRUDOperations;
 import tasks.CreateDataItemTask;
+import tasks.DeleteDataItemTask;
 import tasks.ReadAllDataItemsTask;
 import tasks.UpdateDataItemTask;
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
     public static final int CALL_DETAILVIEW_FOR_EXISTING_ITEM = 1;
+    public static final int CALL_DETAILVIEW_FOR_DELETED_ITEM = 2;
 
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
@@ -188,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void sortListAndFocusItem(DataItem item) {
         sortList();
-
         if(item != null) {
             ((ListView)this.listView).smoothScrollToPosition(this.listViewAdapter.getPosition(item));
         }
@@ -216,12 +217,23 @@ public class MainActivity extends AppCompatActivity {
         ).execute(item);
     }
 
+
+    public void deleteItemAndRemoveItFromList(DataItem item) {
+        new DeleteDataItemTask(
+                crudOperations,
+                deletedItem -> {
+                    this.listViewAdapter.remove(item);
+                    showFeedbackMessage("Deleted item from list.");
+                    sortList();
+                }
+        ).execute(item);
+    }
+
     private void updateItemAndUpdateList(DataItem changedItem) {
         //Log.i("MainActivity","updateItemAndUpdateList changedItem: " + changedItem.getName());
         new UpdateDataItemTask(progressBar,crudOperations,updated -> {
           handleResultFromUpdateTask(changedItem,updated);
         }).execute(changedItem);
-
     }
 
     private  void handleResultFromUpdateTask(DataItem changedItem, boolean updated) {
@@ -249,23 +261,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Log.i("MainActivity","requestCode: " + requestCode + " resultCode: " + resultCode + " data: " + data);
         if (requestCode == CALL_DETAILVIEW_FOR_NEW_ITEM) {
            if (resultCode == Activity.RESULT_OK) {
                DataItem item = (DataItem)data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
-//               showFeedbackMessage("got new item name: " + item);
                createItemAndAddItToList(item);
-           }
-           else if (resultCode == Activity.RESULT_CANCELED) {
-               showFeedbackMessage("no item name input was cancelled.");
            }
            else {
                showFeedbackMessage("no item name received and no cancellation detected. What's wrong?");
            }
         }
         else if (requestCode == CALL_DETAILVIEW_FOR_EXISTING_ITEM) {
+            DataItem item = (DataItem) data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
             if (resultCode == Activity.RESULT_OK) {
-                DataItem item = (DataItem) data.getSerializableExtra(DetailviewActivity.ARG_ITEM);
                 updateItemAndUpdateList(item);
+            } else if (resultCode == 2) {
+                deleteItemAndRemoveItFromList(item);
+                showFeedbackMessage("Item deleted.");
             }
         }
         else {
@@ -295,5 +307,6 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return simpleDateFormat.format(new Date(expiry));
     }
+
 
 }

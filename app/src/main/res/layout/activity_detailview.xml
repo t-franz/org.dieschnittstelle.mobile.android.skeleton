@@ -134,8 +134,8 @@
         android:onClick="@{(view) -> controller.onDeleteItem(view)}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:srcCompat="@drawable/baseline_input_white_24dp"
-        android:rotation="180"
+        app:srcCompat="@drawable/baseline_add_white_24dp"
+        android:rotation="45"
         android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

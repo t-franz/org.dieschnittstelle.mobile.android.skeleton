@@ -47,12 +47,12 @@ import java.util.Date;
 import model.DataItem;
 import model.IDataItemCRUDOperations;
 import tasks.DeleteDataItemTask;
+import tasks.UpdateDataItemTask;
 
 public class DetailviewActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM = "item";
     public static final int CALL_CONTACT_PICKER = 0;
-    private static final int STATUS_DELETED = 2;
     private DataItem item;
     private ActivityDetailviewBinding binding;
     private IDataItemCRUDOperations crudOperations;
@@ -150,23 +150,23 @@ public class DetailviewActivity extends AppCompatActivity {
         if (this.item.getExpiry() == 0) {
             this.item.setExpiry(System.currentTimeMillis()+ (86400 * 7 * 1000));
         }
-        //Log.i("DetailViewActivity","onSaveItem - expire: " + this.item.getExpiry());
         Intent returnData = new Intent();
         returnData.putExtra(ARG_ITEM,this.item);
         this.setResult(Activity.RESULT_OK, returnData);
         finish();
     }
 
-    public void onDeleteItem(View view) {
 
-        if (this.item.getId() == -1) return;
+
+    public void onDeleteItem(View view) {
 
         DialogInterface.OnClickListener dialogClickListener = (dialogInterface, i) -> {
             if (i == DialogInterface.BUTTON_POSITIVE) {
 
-                this.showFeedbackMessage("Sorry, cant delete item " + this.item.getName() + " yet.");
-
-
+                Intent returnData = new Intent();
+                returnData.putExtra(ARG_ITEM,this.item);
+                this.setResult(2,returnData);
+                finish();
 
             }
             else if (i == DialogInterface.BUTTON_NEGATIVE){
@@ -175,7 +175,7 @@ public class DetailviewActivity extends AppCompatActivity {
         };
 
         new AlertDialog.Builder(this)
-                .setMessage("Delete Item " + item.getName() + "?")
+                .setMessage("Delete item " + item.getName() + "?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener)
                 .show();
