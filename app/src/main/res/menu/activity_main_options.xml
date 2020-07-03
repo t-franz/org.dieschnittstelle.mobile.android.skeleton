@@ -5,5 +5,6 @@
     <item android:id="@+id/sortDate" android:title="@string/labelSortDate" />
     <item android:id="@+id/deleteRemote" android:title="@string/labelDeleteRemote"/>
     <item android:id="@+id/deleteLocal" android:title="@string/labelDeleteLocal" />
-    <item android:id="@+id/deleteAll" android:title="@string/labelDeleteAll" />
+<!--    <item android:id="@+id/deleteAll" android:title="@string/labelDeleteAll"/>-->
+    <item android:id="@+id/doSync" android:title="@string/labelDoSync" app:showAsAction="ifRoom" />
 </menu>

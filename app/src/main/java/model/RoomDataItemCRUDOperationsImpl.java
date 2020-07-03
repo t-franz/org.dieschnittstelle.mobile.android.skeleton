@@ -105,4 +105,9 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
         return false;
     }
 
+    @Override
+    public List<DataItem> doSyncItems() {
+        return null;
+    }
+
 }

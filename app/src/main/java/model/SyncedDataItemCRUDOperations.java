@@ -1,6 +1,7 @@
 package model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -63,4 +64,24 @@ public class SyncedDataItemCRUDOperations implements IDataItemCRUDOperations {
     public boolean deleteAllRemote() {
         return this.remoteCRUD.deleteAllRemote();
     }
+
+    public List<DataItem> doSyncItems(){
+        List<DataItem> localItems = localCRUD.readAllDataItems();
+
+        if (localItems.isEmpty()) {
+            List<DataItem> remoteItems = remoteCRUD.readAllDataItems();
+
+            for (DataItem item : remoteItems){
+                localCRUD.createDataItem(item);
+            }
+            localItems = localCRUD.readAllDataItems();
+        }
+
+        remoteCRUD.deleteAllRemote();
+        for (DataItem item : localItems) {
+            remoteCRUD.createDataItem(item);
+        }
+        return localItems;
+    }
+
 }

@@ -1,6 +1,7 @@
 package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.app.Application;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.function.Consumer;
@@ -9,6 +10,7 @@ import model.IDataItemCRUDOperations;
 import model.RoomDataItemCRUDOperationsImpl;
 import model.SyncedDataItemCRUDOperations;
 import tasks.CheckConnectivityTask;
+import tasks.DoSyncItemsTask;
 
 public class DataItemApplication extends Application {
 
@@ -38,6 +40,11 @@ public class DataItemApplication extends Application {
                 // der die doAbgleich-Methode auf CrudOperations aufruft
                 // und in seinem onDone-Callback onDone.Accept aufruft
                 // BESSER: ABGLEICH nach LOGIN
+                ProgressBar progressBar = null;
+                new DoSyncItemsTask(progressBar,
+                        crudOperations,
+                        items -> { }
+                ).execute();
                 onDone.accept(available);
             }
         }).execute();

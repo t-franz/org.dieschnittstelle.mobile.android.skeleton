@@ -19,4 +19,6 @@ public interface IDataItemCRUDOperations {
     public boolean deleteAllRemote();
 
     public boolean deleteAll();
+
+    public List<DataItem> doSyncItems();
 }

@@ -39,6 +39,7 @@ import tasks.DeleteAllLocalsTask;
 import tasks.DeleteAllRemoteTask;
 import tasks.DeleteAllTask;
 import tasks.DeleteDataItemTask;
+import tasks.DoSyncItemsTask;
 import tasks.ReadAllDataItemsTask;
 import tasks.UpdateDataItemTask;
 
@@ -87,18 +88,23 @@ public class MainActivity extends AppCompatActivity {
                 sortFavourites = true;
                 sortList();
                 break;
-            case R.id.deleteAll:
-                deleteAllAndUpdateList();
-                break;
+//            case R.id.deleteAll:
+//                deleteAllAndUpdateList();
+//                break;
             case R.id.deleteLocal:
                 deleteAllLocalsAndUpdateList();
                 break;
             case R.id.deleteRemote:
                 deleteAllRemoteAndUpdateList();
                 break;
+            case R.id.doSync:
+                synchronizeLocalRemote();
+                break;
         }
         return super.onOptionsItemSelected(menuItem);
     }
+
+
 
     private void initialiseView() {
 
@@ -172,12 +178,27 @@ public class MainActivity extends AppCompatActivity {
         new ReadAllDataItemsTask(progressBar,
                 crudOperations,
                 items -> {
+                    if (items.isEmpty()) {
+                        synchronizeLocalRemote();
+                        showFeedbackMessage("Synchronize REMOTE to LOCAL");
+                    }
                     listViewAdapter.addAll(items);
                     sortListAndFocusItem(null);
                 }
         ).execute();
 
+    }
 
+    private void synchronizeLocalRemote() {
+        listViewAdapter.clear();
+        new DoSyncItemsTask(progressBar,
+                crudOperations,
+                items -> {
+                    listViewAdapter.addAll(items);
+                    sortListAndFocusItem(null);
+                }
+        ).execute();
+        this.listViewAdapter.notifyDataSetChanged();
     }
 
     private void sortList() {
@@ -246,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
                     this.listViewAdapter.clear();
                     this.listViewAdapter.notifyDataSetChanged();
                     showFeedbackMessage("Deleted all items from LOCAL list.");
-                    //sortList();
                 }
         ).execute();
     }
@@ -256,9 +276,7 @@ public class MainActivity extends AppCompatActivity {
                 progressBar,
                 crudOperations,
                 deletedItem -> {
-                    this.listViewAdapter.remove(null);
                     showFeedbackMessage("Deleted all items from REMOTE list.");
-                    sortList();
                 }
         ).execute();
     }

@@ -140,4 +140,9 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
         }
         return false;
     }
+
+    @Override
+    public List<DataItem> doSyncItems() {
+        return null;
+    }
 }
