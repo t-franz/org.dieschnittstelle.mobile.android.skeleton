@@ -160,6 +160,8 @@ public class DetailviewActivity extends AppCompatActivity {
 
     public void onDeleteItem(View view) {
 
+        if (this.item.getId() == -1) return;
+
         DialogInterface.OnClickListener dialogClickListener = (dialogInterface, i) -> {
             if (i == DialogInterface.BUTTON_POSITIVE) {
 

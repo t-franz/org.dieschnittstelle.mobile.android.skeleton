@@ -16,22 +16,32 @@ public class DeleteDataItemTask extends AsyncTask<DataItem,Void,Boolean> {
 
     private IDataItemCRUDOperations crudOperations;
     private Consumer<Boolean> onDoneConsumer;
+    private ProgressBar progressBar;
 
+    @Override
+    protected void onPreExecute() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
 
-    public DeleteDataItemTask(IDataItemCRUDOperations crudOperations, Consumer<Boolean> onDoneConsumer) {
-        Log.i("Delete","DeleteDataItemTask : DeleteDataItemTask ");
+    public DeleteDataItemTask(ProgressBar progressBar, IDataItemCRUDOperations crudOperations, Consumer<Boolean> onDoneConsumer) {
+        this.progressBar = progressBar;
         this.crudOperations = crudOperations;
         this.onDoneConsumer = onDoneConsumer;
     }
 
     @Override
     protected Boolean doInBackground(DataItem... dataItems) {
-        Log.i("Delete","DeleteDataItemTask : doInBackground ");
         return this.crudOperations.deleteDataItem(dataItems[0]);
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         onDoneConsumer.accept(result);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.INVISIBLE);
+            progressBar = null;
+        }
     }
 }

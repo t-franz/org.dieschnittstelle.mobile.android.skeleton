@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int CALL_DETAILVIEW_FOR_NEW_ITEM = 0;
     public static final int CALL_DETAILVIEW_FOR_EXISTING_ITEM = 1;
-    public static final int CALL_DETAILVIEW_FOR_DELETED_ITEM = 2;
 
     private ViewGroup listView;
     private ArrayAdapter<DataItem> listViewAdapter;
@@ -220,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void deleteItemAndRemoveItFromList(DataItem item) {
         new DeleteDataItemTask(
+                progressBar,
                 crudOperations,
                 deletedItem -> {
                     this.listViewAdapter.remove(item);
@@ -230,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateItemAndUpdateList(DataItem changedItem) {
-        //Log.i("MainActivity","updateItemAndUpdateList changedItem: " + changedItem.getName());
         new UpdateDataItemTask(progressBar,crudOperations,updated -> {
           handleResultFromUpdateTask(changedItem,updated);
         }).execute(changedItem);
