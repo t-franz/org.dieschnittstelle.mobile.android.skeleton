@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/sortFavorite" android:title="Sort Favorite" />
-    <item android:id="@+id/sortDate" android:title="Sort Date" />
+    <item android:id="@+id/sortFavorite" android:title="@string/labelSortFavorite" />
+    <item android:id="@+id/sortDate" android:title="@string/labelSortDate" />
+    <item android:id="@+id/deleteRemote" android:title="@string/labelDeleteRemote"/>
+    <item android:id="@+id/deleteLocal" android:title="@string/labelDeleteLocal" />
+    <item android:id="@+id/deleteAll" android:title="@string/labelDeleteAll" />
 </menu>

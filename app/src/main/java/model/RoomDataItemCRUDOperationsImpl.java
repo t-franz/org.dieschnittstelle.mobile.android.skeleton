@@ -12,7 +12,6 @@ import androidx.room.RoomDatabase;
 import androidx.room.Update;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
     @Dao
@@ -30,6 +29,11 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
       @Delete
       public int delete(DataItem item);
 
+        @Query("delete from dataitem")
+      public int deleteAllLocal();
+
+        @Query("delete from dataitem")
+      public int deleteAll();
     }
 
     @Database(entities = {DataItem.class}, version = 1)
@@ -54,17 +58,7 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
 
     @Override
     public List<DataItem> readAllDataItems() {
-//        try{
-//            Thread.sleep(2000);
-//        }
-//        catch (Exception e) {
-//
-//        }
-        return db.getDato()
-                .readAll();
-//                .stream()
-//                .map(item -> item.afterLoad())
-//                .collect(Collectors.toList());
+        return db.getDato().readAll();
     }
 
     @Override
@@ -88,4 +82,27 @@ public class RoomDataItemCRUDOperationsImpl implements IDataItemCRUDOperations {
         }
         return false;
     }
+
+
+    @Override
+    public boolean deleteAllLocal() {
+        if (db.getDato().deleteAllLocal() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllRemote() {
+        return false;
+    }
+
+    @Override
+    public boolean deleteAll() {
+        if (db.getDato().deleteAll() > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

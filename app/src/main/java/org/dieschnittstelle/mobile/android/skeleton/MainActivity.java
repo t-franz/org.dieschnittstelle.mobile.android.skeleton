@@ -35,6 +35,9 @@ import java.util.List;
 import model.DataItem;
 import model.IDataItemCRUDOperations;
 import tasks.CreateDataItemTask;
+import tasks.DeleteAllLocalsTask;
+import tasks.DeleteAllRemoteTask;
+import tasks.DeleteAllTask;
 import tasks.DeleteDataItemTask;
 import tasks.ReadAllDataItemsTask;
 import tasks.UpdateDataItemTask;
@@ -83,6 +86,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sortFavorite:
                 sortFavourites = true;
                 sortList();
+                break;
+            case R.id.deleteAll:
+                deleteAllAndUpdateList();
+                break;
+            case R.id.deleteLocal:
+                deleteAllLocalsAndUpdateList();
+                break;
+            case R.id.deleteRemote:
+                deleteAllRemoteAndUpdateList();
                 break;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -136,8 +148,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     itemName.setTextColor(defaultColor);
                     itemDate.setTextColor(defaultColor);
-//                    itemName.setTextColor(getResources().getColor(R.color.design_default_color_primary_dark ,getContext().getTheme()));
-//                    itemDate.setTextColor(getResources().getColor(R.color.design_default_color_primary,getContext().getTheme()));
                 }
 
                 return currentView;
@@ -151,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
         ((ListView)this.listView).setOnItemClickListener((adapterView, view, i, l) -> {
             DataItem item = listViewAdapter.getItem(i);
-            //Log.i("MainActivity","setOnItemClickListener getItem: " + item.getName());
             onListitemSelected(item);
         });
 
@@ -216,6 +225,43 @@ public class MainActivity extends AppCompatActivity {
         ).execute(item);
     }
 
+
+    public void deleteAllAndUpdateList() {
+        new DeleteAllTask(
+                progressBar,
+                crudOperations,
+                deleted -> {
+                    this.listViewAdapter.remove(null);
+                    showFeedbackMessage("Deleted ALL items.");
+                    sortList();
+                }
+        ).execute();
+    }
+
+    public void deleteAllLocalsAndUpdateList() {
+        new DeleteAllLocalsTask(
+                progressBar,
+                crudOperations,
+                deletedItem -> {
+                    this.listViewAdapter.clear();
+                    this.listViewAdapter.notifyDataSetChanged();
+                    showFeedbackMessage("Deleted all items from LOCAL list.");
+                    //sortList();
+                }
+        ).execute();
+    }
+
+    public void deleteAllRemoteAndUpdateList() {
+        new DeleteAllRemoteTask(
+                progressBar,
+                crudOperations,
+                deletedItem -> {
+                    this.listViewAdapter.remove(null);
+                    showFeedbackMessage("Deleted all items from REMOTE list.");
+                    sortList();
+                }
+        ).execute();
+    }
 
     public void deleteItemAndRemoveItFromList(DataItem item) {
         new DeleteDataItemTask(
@@ -297,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
                         })
                 .execute(changedItem);
     }
+
     public String getDateString(Long expiry){
 
         //Log.i("MainActivity getDateString","expiry: " + expiry);

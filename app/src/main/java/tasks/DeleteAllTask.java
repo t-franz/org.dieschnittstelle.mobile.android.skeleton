@@ -6,14 +6,19 @@ import android.widget.ProgressBar;
 
 import java.util.function.Consumer;
 
-import model.DataItem;
 import model.IDataItemCRUDOperations;
 
-public class DeleteDataItemTask extends AsyncTask<DataItem,Void,Boolean> {
+public class DeleteAllTask extends AsyncTask<Void,Void,Boolean> {
 
     private IDataItemCRUDOperations crudOperations;
     private Consumer<Boolean> onDoneConsumer;
     private ProgressBar progressBar;
+
+
+    @Override
+    protected Boolean doInBackground(Void... voids) {
+        return crudOperations.deleteAll();
+    }
 
     @Override
     protected void onPreExecute() {
@@ -22,15 +27,10 @@ public class DeleteDataItemTask extends AsyncTask<DataItem,Void,Boolean> {
         }
     }
 
-    public DeleteDataItemTask(ProgressBar progressBar, IDataItemCRUDOperations crudOperations, Consumer<Boolean> onDoneConsumer) {
+    public DeleteAllTask(ProgressBar progressBar, IDataItemCRUDOperations crudOperations, Consumer<Boolean> onDoneConsumer) {
         this.progressBar = progressBar;
         this.crudOperations = crudOperations;
         this.onDoneConsumer = onDoneConsumer;
-    }
-
-    @Override
-    protected Boolean doInBackground(DataItem... dataItems) {
-        return this.crudOperations.deleteDataItem(dataItems[0]);
     }
 
     @Override

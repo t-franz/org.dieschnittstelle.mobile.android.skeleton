@@ -34,6 +34,12 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
 
         @DELETE("/api/todos/{id}")
         Call<Boolean> deleteDataItem(@Path("id") long id);
+
+        @DELETE("/api/todos")
+        Call<Boolean> deleteAllRemote();
+
+        @DELETE("/api/todos")
+        Call<Boolean> deleteAll();
     }
 
     private TodoWebAPI webAPI;
@@ -100,5 +106,38 @@ public class RetrofitDataItemCRUDOperationsImpl implements IDataItemCRUDOperatio
         }
         return false;
 
+    }
+
+    @Override
+    public boolean deleteAllLocal() {
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllRemote() {
+
+        try {
+            if(webAPI.deleteAllRemote().execute().body()!=null){
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e("RetrofitCRUD","got exception: " + e);
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAll() {
+
+        try {
+            if(webAPI.deleteAll().execute().body()!=null){
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e("RetrofitCRUD","got exception: " + e);
+            return false;
+        }
+        return false;
     }
 }

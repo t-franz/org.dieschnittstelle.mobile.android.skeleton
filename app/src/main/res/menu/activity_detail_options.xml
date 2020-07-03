@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/addContact"
-        android:title="ADD CONTACT"
+        android:title="@string/labelAddContact"
         android:icon="@drawable/baseline_contacts_white_24dp"
         app:showAsAction="always"/>
-    />
 </menu>

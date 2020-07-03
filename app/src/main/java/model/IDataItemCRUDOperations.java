@@ -13,4 +13,10 @@ public interface IDataItemCRUDOperations {
     public boolean updateDataItem(DataItem item);
 
     public boolean deleteDataItem(DataItem item);
+
+    public boolean deleteAllLocal();
+
+    public boolean deleteAllRemote();
+
+    public boolean deleteAll();
 }

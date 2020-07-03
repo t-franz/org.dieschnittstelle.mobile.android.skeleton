@@ -15,4 +15,10 @@
     <string name="hintPasswort">Passwort eingeben</string>
     <string name="hintEmail">E-Mail eingeben</string>
     <string name="labelLoginError">Wrong credentials</string>
+    <string name="labelDeleteLocal">Clear local items</string>
+    <string name="labelDeleteRemote">Clear remote items</string>
+    <string name="labelSortFavorite">Sort for favourites</string>
+    <string name="labelSortDate">Sort for dates</string>
+    <string name="labelAddContact">ADD CONTACT</string>
+    <string name="labelDeleteAll">Delete ALL</string>
 </resources>

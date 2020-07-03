@@ -53,6 +53,7 @@ public class DataItem implements Serializable {
     @Expose(serialize = false, deserialize = false)
     private String contactsStr;
 
+    @Ignore
     public DataItem() {}
 
     public DataItem(String name) {
