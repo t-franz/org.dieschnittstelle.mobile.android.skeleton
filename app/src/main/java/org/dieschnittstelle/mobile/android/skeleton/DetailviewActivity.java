@@ -232,25 +232,6 @@ public class DetailviewActivity extends AppCompatActivity {
         showContactDetails(contactId);
     }
 
-//    public void removeSelectedContactFromContacts(View contactId) {
-//        showFeedbackMessage("contactID: " + contactId);
-//        if (item.getContacts().indexOf(contactId.toString()) == -1) {
-//            item.getContacts().add(contactId.toString());
-//        }
-//    }
-
-
-
-//    public void deleteSelectedContact(Uri contactId){
-//        int position = 0;
-//        for (String currentId : this.contacts){
-//            if (currentId == id){
-//                break;
-//            }
-//            position++;
-//        }
-//        this.contacts.remove(position);
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -322,30 +303,22 @@ public class DetailviewActivity extends AppCompatActivity {
                     sendMail(email, item.getName(), item.getDescription());
                 });
             }
-            //Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
+
 
             contactRemoveText.setOnClickListener(view -> {
                 int position = 0;
-                //Log.i("DetailViewActivity","deleteContact: " + internalContactId );
+
                 for (String currentContact : item.getContacts()){
                     String currentId = currentContact.substring(currentContact.length() - 1);
                     if (currentId.equals(internalContactId)){
                         item.getContacts().remove(position);
+                        listitemLayout.setVisibility(View.GONE);
+                        showFeedbackMessage("Deleted Contact. Save Item to see changes.");
                         break;
                     }
                     position++;
                 }
-                //Log.i("DetailViewActivity","deleteContact at position: " + position );
-                //item.getContacts().remove(0);
-                // oder neue Liste nur mit den != Positionen
-                //s. DataItem.class set Contacts (contactsStr)
-                // Siehe auch Add
-//                if (item.getContacts() == null) {
-//                    item.setContacts(new ArrayList<>());
-//                }
-//                if (item.getContacts().indexOf(contactId.toString()) == -1) {
-//                    item.getContacts().add(contactId.toString());
-//                }
+
             });
         }
 
@@ -359,13 +332,6 @@ public class DetailviewActivity extends AppCompatActivity {
         startActivity(sendSMSIntent);
     }
 
-//    protected void composeSMS(String receiver, String title, String description) {
-//        Uri smsUri = Uri.parse("smsto:" + receiver);
-//        Intent smsIntent = new Intent(Intent.ACTION_SENDTO, smsUri);
-//        smsIntent.putExtra("sms_body", title + ": " + description);
-//
-//        startActivity(smsIntent);
-//    }
 
     private void sendMail(String emailAddress, String name, String description) {
 

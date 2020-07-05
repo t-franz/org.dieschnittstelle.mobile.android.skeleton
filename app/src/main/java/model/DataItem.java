@@ -130,10 +130,6 @@ public class DataItem implements Serializable {
         this.contacts = contacts;
     }
 
-    public void removeContact(String id){
-        this.contacts.remove(id);
-    }
-
     public String getContactsStr() {
         beforePersist();
         return contactsStr;
