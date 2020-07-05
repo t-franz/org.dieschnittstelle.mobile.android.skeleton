@@ -30,10 +30,11 @@
         android:padding="5sp"/>
     <TextView
         android:id="@+id/contactRemove"
-        android:text="Remove"
+        android:text="remove"
+        android:textAlignment="textEnd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:padding="5sp"/>
 <!--    android:onClick="@{(Uri) -> controller.removeSelectedContactFromContacts(Uri)}"-->
 </LinearLayout>

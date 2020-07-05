@@ -232,12 +232,12 @@ public class DetailviewActivity extends AppCompatActivity {
         showContactDetails(contactId);
     }
 
-    public void removeSelectedContactFromContacts(View contactId) {
-        showFeedbackMessage("contactID: " + contactId);
+//    public void removeSelectedContactFromContacts(View contactId) {
+//        showFeedbackMessage("contactID: " + contactId);
 //        if (item.getContacts().indexOf(contactId.toString()) == -1) {
 //            item.getContacts().add(contactId.toString());
 //        }
-    }
+//    }
 
 
 
@@ -295,7 +295,7 @@ public class DetailviewActivity extends AppCompatActivity {
                 int phoneNumberType = phoneCursor.getInt(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA2));
 
                 if (phoneNumberType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                    Log.i("DetailviewActivity","found mobile number: " + number);
+                    //Log.i("DetailviewActivity","found mobile number: " + number);
                     contactPhoneText.setText(number);
                     contactPhoneText.setOnClickListener(view -> {
                         sendSMS(number, item.getName(), item.getDescription());
@@ -303,10 +303,10 @@ public class DetailviewActivity extends AppCompatActivity {
                     });
                 }
                 else {
-                    Log.i("DetailViewActivity","found other number: " + number);
+                    //Log.i("DetailViewActivity","found other number: " + number);
                 }
             }
-            Log.i("DetailViewActivity","no (further) phone numbers found for contact " + contactName);
+            //Log.i("DetailViewActivity","no (further) phone numbers found for contact " + contactName);
 
             Cursor emailCursor = getContentResolver().query(
                     ContactsContract.CommonDataKinds.Email.CONTENT_URI,
@@ -316,49 +316,42 @@ public class DetailviewActivity extends AppCompatActivity {
                     null,null);
             while (emailCursor.moveToNext()) {
                 String email = emailCursor.getString(emailCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
-                Log.i("DetailViewActivity","email is: " + email);
+                //Log.i("DetailViewActivity","email is: " + email);
                 contactEmailText.setText(email);
                 contactEmailText.setOnClickListener(view -> {
                     sendMail(email, item.getName(), item.getDescription());
                 });
             }
-            Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
+            //Log.i("DetailViewActivity","no (further) email addresses found for contact " + contactName);
 
             contactRemoveText.setOnClickListener(view -> {
-                Log.i("DetaiViewActivity","internalContactId: " + internalContactId );
-                Log.i("DetaiViewActivity","contactId: " + contactId );
-                Log.i("DetaiViewActivity","item.getContacts(): " + item.getContacts());
                 int position = 0;
-                Log.i("DetaiViewActivity","deleteContact: " + internalContactId );
-                for (String currentId : item.getContacts()){
-                    Log.i("DetaiViewActivity","deleteContactFOR: " + currentId );
-                    if (currentId == internalContactId){
+                //Log.i("DetailViewActivity","deleteContact: " + internalContactId );
+                for (String currentContact : item.getContacts()){
+                    String currentId = currentContact.substring(currentContact.length() - 1);
+                    if (currentId.equals(internalContactId)){
+                        item.getContacts().remove(position);
                         break;
                     }
                     position++;
                 }
-            //this.contacts.remove(position);
+                //Log.i("DetailViewActivity","deleteContact at position: " + position );
+                //item.getContacts().remove(0);
+                // oder neue Liste nur mit den != Positionen
+                //s. DataItem.class set Contacts (contactsStr)
+                // Siehe auch Add
+//                if (item.getContacts() == null) {
+//                    item.setContacts(new ArrayList<>());
+//                }
+//                if (item.getContacts().indexOf(contactId.toString()) == -1) {
+//                    item.getContacts().add(contactId.toString());
+//                }
             });
-
-
         }
 
         contactsWrapper.addView(listitemLayout);
     }
 
-//    public void deleteContact(String contactId) {
-//            int position = 0;
-//            Log.i("DetaiViewActivity","deleteContact: " + contactId );
-//            for (String currentId : item.getContacts()){
-//                Log.i("DetaiViewActivity","deleteContactFOR: " + currentId );
-//                if (currentId == contactId){
-//                    break;
-//                }
-//                position++;
-//            }
-//            //this.contacts.remove(position);
-//        }
-//    }
 
     private void sendSMS(String phoneNumber, String title, String description ) {
         Intent sendSMSIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:"+phoneNumber));
