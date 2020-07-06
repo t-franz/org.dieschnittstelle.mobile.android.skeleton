@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public Button loginBtn;
     public EditText loginEmail,loginPassword;
-    public TextView loginError;
+    public TextView loginError, loginEmailError;
     public ProgressBar progressBar;
 
 
@@ -48,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         loginPassword = findViewById(R.id.loginPassword);
         loginBtn = findViewById(R.id.loginBtn);
         loginError = findViewById(R.id.loginError);
+        loginEmailError = findViewById(R.id.loginEmailError);
         loginError.setVisibility(View.GONE);
+        loginEmailError.setVisibility(View.VISIBLE);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -56,8 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         loginEmail.setError("Bitte E-Mail-Adresse eintragen");
 
         // PREFILL ####################
-        loginEmail.setText("s@bht.de");
-        loginPassword.setText("000000");
+//        loginEmail.setText("s@bht.de");
+//        loginPassword.setText("000000");
         // PREFILL ####################
 
         loginBtn.setOnClickListener(v -> {
@@ -66,9 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = loginPassword.getText().toString();
             progressBar.setVisibility(View.VISIBLE);
 
-
             new Handler().postDelayed(() -> {
-
                 if(email.equals("s@bht.de") && password.equals("000000")) {
                     loginError.setVisibility(View.GONE);
                     if (progressBar != null ) {
@@ -93,9 +93,16 @@ public class LoginActivity extends AppCompatActivity {
             if (!hasFocus) {
                 if (isValidEmail(loginEmail.getText().toString())) {
                     loginEmail.setError(null);
-                } else {
-                    loginEmail.setError("Fehlerhafte E-Mail");
+                    loginEmailError.setVisibility(View.GONE);
+                } else if(!(loginEmail.getText().toString().length() > 0)) {
+                    loginEmailError.setVisibility(View.VISIBLE);
                 }
+                else {
+                    loginEmail.setError("Fehlerhafte E-Mail");
+                    loginEmailError.setVisibility(View.GONE);
+                }
+            } else {
+                loginEmailError.setVisibility(View.GONE);
             }
         });
 

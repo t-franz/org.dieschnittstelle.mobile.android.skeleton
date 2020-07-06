@@ -14,7 +14,7 @@
     <string name="labelLogin">Anmelden</string>
     <string name="hintPasswort">Passwort eingeben</string>
     <string name="hintEmail">E-Mail eingeben</string>
-    <string name="labelLoginError">Wrong credentials</string>
+    <string name="labelLoginError">Falsche Anmeldedaten</string>
     <string name="labelDeleteLocal">Clear local items</string>
     <string name="labelDeleteRemote">Clear remote items</string>
     <string name="labelSortFavorite">Sort for favourites</string>
@@ -23,4 +23,5 @@
     <string name="labelDeleteAll">Delete ALL</string>
     <string name="labelDoSync">Sync</string>
     <string name="labelKontakte">Kontakte</string>
+    <string name="labelLoginEmailError">Bitte E-Mail-Adresse eingeben</string>
 </resources>

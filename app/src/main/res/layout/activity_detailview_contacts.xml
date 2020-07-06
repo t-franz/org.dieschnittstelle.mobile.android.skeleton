@@ -36,6 +36,5 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:padding="5sp"/>
-<!--    android:onClick="@{(Uri) -> controller.removeSelectedContactFromContacts(Uri)}"-->
 </LinearLayout>
 </layout>

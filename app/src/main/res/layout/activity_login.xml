@@ -42,6 +42,16 @@
                 android:text="@string/labelLogin"/>
 
             <TextView
+                android:id="@+id/loginEmailError"
+                android:text="@string/labelLoginEmailError"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:padding="10sp"
+                android:textAlignment="center"/>
+
+            <TextView
                 android:id="@+id/loginError"
                 android:text="@string/labelLoginError"
                 android:textColor="@color/colorAccent"

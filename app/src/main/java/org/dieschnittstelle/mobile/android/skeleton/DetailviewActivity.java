@@ -256,9 +256,9 @@ public class DetailviewActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},4);
             return;
         }
-        else {
-            showFeedbackMessage("Contact Permissions have been granted!");
-        }
+//        else {
+//            showFeedbackMessage("Contact Permissions have been granted!");
+//        }
 
         Cursor cursor = getContentResolver().query(contactId,null,null,null,null );
 
