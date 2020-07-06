@@ -64,11 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((DataItemApplication) getApplication())
-                .verifyWebappAvailable(available -> {
-                   this.initialiseView();
-                }
-        );
+        this.initialiseView();
     }
 
     @Override
@@ -103,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(menuItem);
     }
-
-
 
     private void initialiseView() {
 

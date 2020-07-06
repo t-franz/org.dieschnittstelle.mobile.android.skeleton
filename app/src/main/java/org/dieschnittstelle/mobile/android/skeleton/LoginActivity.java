@@ -2,12 +2,14 @@ package org.dieschnittstelle.mobile.android.skeleton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,9 +20,10 @@ import org.dieschnittstelle.mobile.android.skeleton.databinding.ActivityLoginBin
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button loginBtn;
-    EditText loginEmail,loginPassword;
-    TextView loginError;
+    public Button loginBtn;
+    public EditText loginEmail,loginPassword;
+    public TextView loginError;
+    public ProgressBar progressBar;
 
 
     private ActivityLoginBinding binding;
@@ -28,8 +31,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_login);
 
+        ((DataItemApplication) getApplication()).verifyWebappAvailable(available -> {
+            if (!available) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            } else {
+                initialiseLogin();
+            }
+        });
+    }
+
+    private void initialiseLogin() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         loginEmail = findViewById(R.id.loginEmail);
         loginPassword = findViewById(R.id.loginPassword);
@@ -37,34 +50,41 @@ public class LoginActivity extends AppCompatActivity {
         loginError = findViewById(R.id.loginError);
         loginError.setVisibility(View.GONE);
 
+        progressBar = findViewById(R.id.progressBar);
+
         loginBtn.setEnabled(false);
         loginEmail.setError("Bitte E-Mail-Adresse eintragen");
 
-        // REMOVE ####################
-        loginEmail.setText("s@bht.de");
-        loginPassword.setText("000000");
-        loginBtn.setEnabled(true);
-        // REMOVE ####################
-
-        ((DataItemApplication) getApplication()).verifyWebappAvailable(available -> {
-                        if (!available) {
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }
-                    }
-                );
+        // PREFILL ####################
+        //loginEmail.setText("s@bht.de");
+        ///loginPassword.setText("000000");
+        // PREFILL ####################
 
         loginBtn.setOnClickListener(v -> {
 
             String email = loginEmail.getText().toString();
             String password = loginPassword.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
 
-            if(email.equals("s@bht.de") && password.equals("000000")) {
-                loginError.setVisibility(View.GONE);
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-            else{
-                loginError.setVisibility(View.VISIBLE);
-            }
+
+            new Handler().postDelayed(() -> {
+
+                if(email.equals("s@bht.de") && password.equals("000000")) {
+                    loginError.setVisibility(View.GONE);
+                    if (progressBar != null ) {
+                        progressBar.setVisibility(View.GONE);
+                        progressBar = null;
+                    }
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+                else {
+                    if (progressBar != null ) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                    loginError.setVisibility(View.VISIBLE);
+                    loginBtn.setEnabled(false);
+                }
+           }, 2000);
         });
 
 
