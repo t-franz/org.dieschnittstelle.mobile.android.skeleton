@@ -56,8 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         loginEmail.setError("Bitte E-Mail-Adresse eintragen");
 
         // PREFILL ####################
-        //loginEmail.setText("s@bht.de");
-        ///loginPassword.setText("000000");
+        loginEmail.setText("s@bht.de");
+        loginPassword.setText("000000");
         // PREFILL ####################
 
         loginBtn.setOnClickListener(v -> {

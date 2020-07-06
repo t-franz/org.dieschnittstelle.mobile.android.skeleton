@@ -184,6 +184,10 @@ public class DetailviewActivity extends AppCompatActivity {
         return item;
     }
 
+    public String expiryTimeAsString(View view) {
+        return this.expiryTimeAsString(view);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_detail_options,menu);
@@ -262,7 +266,7 @@ public class DetailviewActivity extends AppCompatActivity {
             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             String internalContactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
             contactNameText.setText(contactName);
-            showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
+            //showFeedbackMessage("Selected contact: " + contactName + " with id " +  internalContactId);
 
 
             Cursor phoneCursor = getContentResolver().query(
@@ -313,7 +317,7 @@ public class DetailviewActivity extends AppCompatActivity {
                     if (currentId.equals(internalContactId)){
                         item.getContacts().remove(position);
                         listitemLayout.setVisibility(View.GONE);
-                        showFeedbackMessage("Deleted Contact. Save Item to see changes.");
+                        showFeedbackMessage("Removed contact.");
                         break;
                     }
                     position++;

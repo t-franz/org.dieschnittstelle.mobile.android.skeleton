@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{() -> controller.setDateAndTime()}"
-            android:text="@{String.valueOf(controller.item.expiry)}"
+            android:text="@{controller.item.getDateString()}"
             app:hintEnabled="true"
             android:hint="@string/labelChangeExpiry"
             android:textSize="20sp" />
@@ -109,9 +109,9 @@
         android:layout_height="300sp"
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintTop_toBottomOf="@id/itemDateWrapper"
-        android:text = "Kontakte"
         android:textSize = "20sp">
         <LinearLayout
+            android:text = "@string/labelKontakte"
             android:id="@+id/contactsWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

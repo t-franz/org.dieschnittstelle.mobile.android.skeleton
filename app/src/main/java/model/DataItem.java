@@ -161,12 +161,13 @@ public class DataItem implements Serializable {
     }
 
     public String getDateString(){
-        Log.i("DataItem getDateString","this.expiry: " + this.expiry + " this.name: " + this.name);
+        //Log.i("DataItem getDateString","this.expiry: " + this.expiry + " this.name: " + this.name);
         if (this.expiry == 0){
-            return "Datum und Uhrzeit";
+            return " (click to set date and time)";
         }
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         return simpleDateFormat.format(new Date(this.expiry));
     }
+
 }

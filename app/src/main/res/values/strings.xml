@@ -22,4 +22,5 @@
     <string name="labelAddContact">ADD CONTACT</string>
     <string name="labelDeleteAll">Delete ALL</string>
     <string name="labelDoSync">Sync</string>
+    <string name="labelKontakte">Kontakte</string>
 </resources>
